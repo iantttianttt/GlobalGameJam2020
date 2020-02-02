@@ -202,6 +202,7 @@ public class ModuleManager : Singleton<ModuleManager>
     public void RequestDestoryModule(ModuleBase iModuleBase)
     {
         aAllModule.Remove(iModuleBase);
+        aSetUpModuleList.Remove(iModuleBase.ModuleIndex);
         Destroy(iModuleBase.gameObject);
     }
 
