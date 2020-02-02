@@ -36,8 +36,11 @@ public class GameManager : Singleton<GameManager>
 
     public void ResetPressureTimer()
     {
-        Debug.LogError("Reset!");
         aPressureTimer = 0.0f;
+        if (aGameState == GameState.FirstSteamTime)
+        {
+            aGameState = GameState.CoreGameTime;
+        }
     }
 
 

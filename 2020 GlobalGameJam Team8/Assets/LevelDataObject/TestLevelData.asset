@@ -15,7 +15,7 @@ MonoBehaviour:
   LevelData:
     LevelName: 
     LevelLayout: {x: 8, y: 6}
-    SteamStartTimer: 20
+    SteamStartTimer: 15
     SteamBreakTimer: 10
     DefaultModule:
     - ModuleType: 1
@@ -23,15 +23,15 @@ MonoBehaviour:
       ModuleDirection: 3
       ModuleCreateTimer: {x: 1, y: 3}
       ModuleCreateList:
-      - ModuleCreateRaito: 10
+      - ModuleCreateRaito: 15
         ModuleType: 10
-      - ModuleCreateRaito: 10
+      - ModuleCreateRaito: 15
         ModuleType: 11
-      - ModuleCreateRaito: 5
+      - ModuleCreateRaito: 8
         ModuleType: 12
-      - ModuleCreateRaito: 3
+      - ModuleCreateRaito: 4
         ModuleType: 13
-      - ModuleCreateRaito: 3
+      - ModuleCreateRaito: 4
         ModuleType: 14
       ConveyorSpeed: 2
       BossTimer: {x: 60, y: 90}

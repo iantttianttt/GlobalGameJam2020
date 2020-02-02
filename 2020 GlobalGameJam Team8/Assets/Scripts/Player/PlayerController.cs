@@ -158,18 +158,23 @@ public class PlayerController : MonoBehaviour
         Vector2 targetIndex = ModuleManager.Instance.GetClosestIndexDictionary(putDownPos);
         ModuleBase moduleBase = null;
         ModuleManager.Instance.SetUpModuleList.TryGetValue(targetIndex, out moduleBase);
-        if (moduleBase == null)
+        if (moduleBase == null && holdModule.gameObject.GetComponent<ModuleBase>().ModuleType != ModuleType.HAMMER)
         {
             Vector3 newPutDownPos;
             ModuleManager.Instance.ModulePositionData.TryGetValue(targetIndex, out newPutDownPos);
             holdModule.gameObject.GetComponent<Rigidbody>().isKinematic = true;
             holdModule.gameObject.transform.position = new Vector3(newPutDownPos.x, 0.0f, newPutDownPos.z);
-            Debug.Log("newPutDownPos" + newPutDownPos);
             holdModule.gameObject.layer = 9;
-            holdModule.gameObject.GetComponent<Collider>().isTrigger   = false;
+            holdModule.gameObject.GetComponent<Collider>().isTrigger = false;
             holdModule.gameObject.GetComponent<Rigidbody>().useGravity = false;
             holdModule.gameObject.GetComponent<ModuleBase>().SetUpModule(targetIndex);
             GameManager.Instance.ResetPressureTimer();
+            return true;
+        }
+        else if (moduleBase != null && holdModule.gameObject.GetComponent<ModuleBase>().ModuleType == ModuleType.HAMMER)
+        {
+            ModuleManager.Instance.RequestDestoryModule(moduleBase);
+            ModuleManager.Instance.RequestDestoryModule(holdModule.gameObject.GetComponent<ModuleBase>());
             return true;
         }
         return false;
@@ -207,7 +212,6 @@ public class PlayerController : MonoBehaviour
                 {
                     moduleBase.TakeOutModuleFromConveyor();
                 }
-                //StartCoroutine(ChangeState(0, PlayerState.HoldingModule));
                 curentState = PlayerState.HoldingModule;
             }
         }

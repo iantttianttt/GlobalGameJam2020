@@ -11,16 +11,16 @@ public class ModuleTube_End : ModuleBase
 		switch (aModuleDirection)
 		{
 			case ModuleDirection.UP:
-				aModuleLinkDirection.Add(ModuleDirection.DOWN);
-				break;
-			case ModuleDirection.DOWN:
 				aModuleLinkDirection.Add(ModuleDirection.UP);
 				break;
+			case ModuleDirection.DOWN:
+				aModuleLinkDirection.Add(ModuleDirection.DOWN);
+				break;
 			case ModuleDirection.RIGHT:
-				aModuleLinkDirection.Add(ModuleDirection.LEFT);
+				aModuleLinkDirection.Add(ModuleDirection.RIGHT);
 				break;
 			case ModuleDirection.LEFT:
-				aModuleLinkDirection.Add(ModuleDirection.RIGHT);
+				aModuleLinkDirection.Add(ModuleDirection.LEFT);
 				break;
 		}
 				

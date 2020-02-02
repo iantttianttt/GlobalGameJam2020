@@ -17,10 +17,9 @@ public class ModuleTube_Cross : ModuleBase
 	public override void UpdateModule()
 	{
 		base.UpdateModule();
-
 		switch (aModuleDirection)
 		{
-			case ModuleDirection.CROSS:
+			case ModuleDirection.UP:
 				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(aModuleIndex));
 				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(aModuleIndex));
 				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(aModuleIndex));

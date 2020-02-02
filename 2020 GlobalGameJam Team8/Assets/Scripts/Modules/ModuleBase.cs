@@ -54,11 +54,13 @@ public class ModuleBase : MonoBehaviour
         {
             ModuleManager.Instance.SetUpModuleList.Add(iNewIndex, this);
         }
+        aModuleIndex = iNewIndex;
     }
 
     public void TakeOutModuleFromConveyor()
     {
         aIsOnConveyor = false;
+        aAutoUpdate   = false;
     }
 
     public virtual void UpdateModule()

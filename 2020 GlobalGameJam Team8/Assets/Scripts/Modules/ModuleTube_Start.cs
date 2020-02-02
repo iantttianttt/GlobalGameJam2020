@@ -28,7 +28,6 @@ public class ModuleTube_Start: ModuleBase
 				break;
 			case ModuleDirection.RIGHT:
 				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(aModuleIndex));
-				Debug.LogError(ModuleManager.Instance.GetRightModule(aModuleIndex));
 				break;
 		}
 	}

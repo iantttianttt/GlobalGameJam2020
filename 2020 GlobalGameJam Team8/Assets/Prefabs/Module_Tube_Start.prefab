@@ -127,7 +127,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: _Pipe
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -2036607833470244704, guid: 9d03d4b3ad290f94b990d041b13c1ef1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9d03d4b3ad290f94b990d041b13c1ef1, type: 3}
 --- !u!4 &3025057298584915379 stripped
 Transform:

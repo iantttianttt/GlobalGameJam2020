@@ -207,7 +207,6 @@ public class ModuleManager : Singleton<ModuleManager>
 
     public bool RequestModuleUpdate(ModuleBase iTargetModule)
     {
-        Debug.LogWarning("AAAAAAAAAAAAAAAAAAAAAA" + iTargetModule);
         if (!aIsSetUpFinish)       { return false; }
         if (iTargetModule == null) { return false; }
 
@@ -221,9 +220,8 @@ public class ModuleManager : Singleton<ModuleManager>
         }
         if (!hasUpdated)
         {
-            Debug.LogWarning(iTargetModule);
-            iTargetModule.UpdateModule();
             aUpdatedModule.Add(iTargetModule);
+            iTargetModule.UpdateModule();
             return true;
         }
         return false;
