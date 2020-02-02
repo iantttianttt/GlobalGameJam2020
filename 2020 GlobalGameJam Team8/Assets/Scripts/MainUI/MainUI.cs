@@ -20,9 +20,9 @@ public class MainUI : MonoBehaviour
     /// 設定壓力計
     /// </summary>
     /// <param name="pressure"></param>
-    public void SetBar(float pressure)
+    public void SetBar(float pressure, float maxPressure)
     {
-        Bar.fillAmount = pressure;
-        Pointer.rectTransform.eulerAngles=new Vector3(0, 0, pressure*-140);
+        Bar.fillAmount = pressure/ maxPressure;
+        Pointer.rectTransform.eulerAngles=new Vector3(0, 0, pressure / maxPressure * -140);
     }
 }

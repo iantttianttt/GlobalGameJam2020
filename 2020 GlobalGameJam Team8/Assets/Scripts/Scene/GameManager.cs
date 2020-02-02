@@ -67,6 +67,7 @@ public class GameManager : Singleton<GameManager>
                 ModuleManager.Instance.RequestModuleUpdate(ModuleTube_Start);
                 ModuleManager.Instance.ModuleAutoUpdate();
                 aPressureTimer += Time.deltaTime;
+                mainUI.SetBar(aPressureTimer, aSteamStartTimer);
                 if (aPressureTimer > aSteamStartTimer)
                 {
                     GameOver();
@@ -76,7 +77,8 @@ public class GameManager : Singleton<GameManager>
                 ModuleManager.Instance.RequestModuleUpdate(ModuleTube_Start);
                 ModuleManager.Instance.ModuleAutoUpdate();
                 aPressureTimer += Time.deltaTime;
-                if(aPressureTimer > aSteamBreakTimer)
+                mainUI.SetBar(aPressureTimer, aSteamBreakTimer);
+                if (aPressureTimer > aSteamBreakTimer)
                 {
                     GameOver();
                 }
@@ -137,7 +139,6 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     private void EveryFrameUpdate()
     {
-        mainUI.SetBar(aPressureTimer*0.1f);
         if (XCI.GetButton(XboxButton.Start, XboxController.All))
         {
             pauseUI.gameObject.SetActive(true);
