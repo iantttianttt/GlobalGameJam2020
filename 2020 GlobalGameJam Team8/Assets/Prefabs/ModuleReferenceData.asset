@@ -31,7 +31,8 @@ MonoBehaviour:
   - ModuleType: 6
     ObjectReference: {fileID: 0}
   - ModuleType: 7
-    ObjectReference: {fileID: 0}
+    ObjectReference: {fileID: 191915701198159166, guid: 9b3f5b8c18cc2ca4a9e2d856e3c5a0ad,
+      type: 3}
   - ModuleType: 8
     ObjectReference: {fileID: 1621192797407123973, guid: 7e9f8f62479047b4b8b9b281fb949960,
       type: 3}
