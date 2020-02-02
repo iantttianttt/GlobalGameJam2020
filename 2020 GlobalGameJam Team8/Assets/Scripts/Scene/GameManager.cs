@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XboxCtrlrInput;
 
 
 public enum GameState
@@ -9,6 +10,7 @@ public enum GameState
     ReadyTimer,
     FirstSteamTime,
     CoreGameTime,
+    GamePause,
     GameOver,
 }
 
@@ -17,6 +19,7 @@ public class GameManager : Singleton<GameManager>
 {
     public GameObject playerPrefab;
     public MainUI mainUI;
+    public PauseUI pauseUI;
     public ModuleTube_Start  ModuleTube_Start;
     public LevelDataObject[] LevelDatas;
 
@@ -81,6 +84,9 @@ public class GameManager : Singleton<GameManager>
             case GameState.GameOver:
                 break;
         }
+
+        EveryFrameUpdate();
+
     }
 
 
@@ -126,7 +132,18 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("YOU DIE!!!!");
     }
 
-
+    /// <summary>
+    /// 每一幀更新時執行
+    /// </summary>
+    private void EveryFrameUpdate()
+    {
+        mainUI.SetBar(aPressureTimer*0.1f);
+        if (XCI.GetButton(XboxButton.Start, XboxController.All))
+        {
+            pauseUI.gameObject.SetActive(true);
+            Time.timeScale = 0;
+        }
+    }
 
     private GameState aGameState;
     private float aSteamStartTimer;

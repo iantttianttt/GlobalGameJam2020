@@ -1,0 +1,18 @@
+<Pipebottom>
+  <Shader>Autodesk Interactive</Shader>
+  <Rewrite>True</Rewrite>
+  <Channels>
+    <_MainTex>Texture,COLOR,Assets/Scene/Textures/PipeBottom_Pipebottom_BaseColor.png</_MainTex>
+    <_Color>Color,#FFFFFF</_Color>
+    <_Metallic>Float,0.0</_Metallic>
+    <_MetallicGlossMap>Texture,COLOR,Assets/Scene/Textures/PipeBottom_Pipebottom_Metallic.png</_MetallicGlossMap>
+    <_Glossiness>Float,0.0</_Glossiness>
+    <_SpecGlossMap>Texture,COLOR,Assets/Scene/Textures/PipeBottom_Pipebottom_Roughness.png</_SpecGlossMap>
+    <_SpecularHighlights>Float,1.0</_SpecularHighlights>
+    <_GlossyReflections>Float,1.0</_GlossyReflections>
+    <_BumpMap>Texture,NORMAL,Assets/Scene/Textures/PipeBottom_Pipebottom_Normal.png</_BumpMap>
+    <_EmissionMap />
+    <_EmissionColor />
+    <_Transparent>OPAQUE</_Transparent>
+  </Channels>
+</Pipebottom>

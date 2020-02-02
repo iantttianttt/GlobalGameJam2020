@@ -21,7 +21,7 @@ namespace XboxCtrlrInput
         /// <summary>
         ///     "All" Controllers is deprecated! Use "Any" instead.
         /// </summary>
-        [System.Obsolete("Instead use XboxController.Any")]
+       /// [System.Obsolete("Instead use XboxController.Any")]
         All = 0,
 
         Any = 0,
