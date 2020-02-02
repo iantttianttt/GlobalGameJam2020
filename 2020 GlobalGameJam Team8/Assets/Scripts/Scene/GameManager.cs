@@ -142,7 +142,10 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     private void EveryFrameUpdate()
     {
-        if (XCI.GetButton(XboxButton.Start, XboxController.All))
+        if (XCI.GetButtonDown(XboxButton.Start, XboxController.First) ||
+            XCI.GetButtonDown(XboxButton.Start, XboxController.Second) ||
+            XCI.GetButtonDown(XboxButton.Start, XboxController.Fourth) ||
+            XCI.GetButtonDown(XboxButton.Start, XboxController.Third))
         {
             pauseUI.gameObject.SetActive(true);
             Time.timeScale = 0;

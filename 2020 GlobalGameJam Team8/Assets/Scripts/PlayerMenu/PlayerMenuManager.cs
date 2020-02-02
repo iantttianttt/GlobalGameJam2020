@@ -28,6 +28,9 @@ public class PlayerMenuManager : MonoBehaviour
     public Sprite p3Sprite_Gray;
     public Sprite p4Sprite_Gray;
 
+    private int LevalID = 1;
+
+
     void Start()
     {
         P1 = new PlayerInfo(XboxController.First);
@@ -48,6 +51,10 @@ public class PlayerMenuManager : MonoBehaviour
         {
             CheckGameStart();
         }
+
+
+       
+
     }
 
     /// <summary>
@@ -131,7 +138,24 @@ public class PlayerMenuManager : MonoBehaviour
                 GoToGameScene();
             }
         }
-       
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            LevalID = 1;
+            GoToGameScene();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            LevalID = 2;
+            GoToGameScene();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            LevalID = 3;
+            GoToGameScene();
+        }
+
     }
 
     /// <summary>
@@ -139,6 +163,6 @@ public class PlayerMenuManager : MonoBehaviour
     /// </summary>
     public void GoToGameScene()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("GameScene"+LevalID);
     }
 }

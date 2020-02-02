@@ -24,11 +24,19 @@ public class PauseUI : MonoBehaviour
 
     void Update()
     {
-        if(XCI.GetButtonDown(XboxButton.DPadUp, XboxController.All)){
+        if (XCI.GetButtonDown(XboxButton.DPadUp, XboxController.First) ||
+           XCI.GetButtonDown(XboxButton.DPadUp, XboxController.Second) ||
+           XCI.GetButtonDown(XboxButton.DPadUp, XboxController.Fourth) ||
+           XCI.GetButtonDown(XboxButton.DPadUp, XboxController.Third))
+        {
             selectID--;
         }
 
-        if (XCI.GetButtonDown(XboxButton.DPadDown, XboxController.All)){
+        if (XCI.GetButtonDown(XboxButton.DPadDown, XboxController.First) ||
+           XCI.GetButtonDown(XboxButton.DPadDown, XboxController.Second) ||
+           XCI.GetButtonDown(XboxButton.DPadDown, XboxController.Fourth) ||
+           XCI.GetButtonDown(XboxButton.DPadDown, XboxController.Third))
+        {
             selectID++;
         }
 

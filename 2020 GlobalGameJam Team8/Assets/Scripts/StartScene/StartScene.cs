@@ -15,7 +15,10 @@ public class StartScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (XCI.GetButtonDown(XboxButton.Start, XboxController.All))
+        if (XCI.GetButtonDown(XboxButton.Start, XboxController.First)||
+            XCI.GetButtonDown(XboxButton.Start, XboxController.Second)||
+            XCI.GetButtonDown(XboxButton.Start, XboxController.Fourth)||
+            XCI.GetButtonDown(XboxButton.Start, XboxController.Third))
             SceneManager.LoadScene("PlayerMenu");
     }
 }
