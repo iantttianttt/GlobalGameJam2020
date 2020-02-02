@@ -565,6 +565,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Bar: {fileID: 2832831333237873583}
   Pointer: {fileID: 2832831332855983937}
+  GameOver: {fileID: 41276325905327275}
+  YouWin: {fileID: 7257924267161544319}
 --- !u!1 &7257924267161544319
 GameObject:
   m_ObjectHideFlags: 0
