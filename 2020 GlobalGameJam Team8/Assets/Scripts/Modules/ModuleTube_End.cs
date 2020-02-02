@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class ModuleTube_End : ModuleBase
 {
+	public override void InitModule(ModuleData iModuleData)
+	{
+		base.InitModule(iModuleData);
+		aAutoUpdate = false;
+	}
+
 
 	public override void UpdateModule()
 	{

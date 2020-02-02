@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class ModuleTube_Line : ModuleBase
 {
+	public override void InitModule(ModuleData iModuleData)
+	{
+		base.InitModule(iModuleData);
+		switch (aModuleDirection)
+		{
+			case ModuleDirection.UP_TO_DOWN: break;
+			case ModuleDirection.DOWN_TO_UP:    this.gameObject.transform.Rotate(new Vector3(0.0f, 180f, 0.0f)); break;
+			case ModuleDirection.LEFT_TO_RIGHT: this.gameObject.transform.Rotate(new Vector3(0.0f, 90f, 0.0f));  break;
+			case ModuleDirection.RIGHT_TO_LEFT: this.gameObject.transform.Rotate(new Vector3(0.0f, 270f, 0.0f)); break;
+		}
+	}
 
 	public override void UpdateModule()
 	{

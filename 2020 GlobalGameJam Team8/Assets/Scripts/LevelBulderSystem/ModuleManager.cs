@@ -16,7 +16,14 @@ public class ModuleManager : Singleton<ModuleManager>
     public bool      GetIsSetUpFinish    { get { return aIsSetUpFinish;    }}
     public LevelData GetCurrentLevelData { get { return aCurrentLevelData; }} //TODO
     public GameObject Floor;
-    public LevelData AA;
+    public GameObject UpWall;
+    public GameObject LeftWall;
+    public GameObject RightWall;
+    public GameObject DownWall;
+
+    public LevelDataObject AA;
+    public ModuleReferenceObject ModuleReferenceObject;
+    public Dictionary<Vector2, Vector3> ModulePositionData { get { return aModulePositionData; } }
 
     //-----------------------------------------------------------------------
     //Public Function
@@ -30,14 +37,33 @@ public class ModuleManager : Singleton<ModuleManager>
     {
         aCurrentLevelData = iLevelData;
         CalculateModulePositionData(aCurrentLevelData);
+
+        Floor.transform.localScale = new Vector3(aCurrentLevelData.LevelLayout.x + 2, 1.0f, aCurrentLevelData.LevelLayout.y + 2);
+        Vector3 upRight;
+        Vector3 downLeft;
+        aModulePositionData.TryGetValue(new Vector2(aCurrentLevelData.LevelLayout.x, aCurrentLevelData.LevelLayout.y), out upRight);
+        aModulePositionData.TryGetValue(new Vector2(1, 1), out downLeft);
+        UpWall.transform.position    = new Vector3(UpWall.transform.position.x, UpWall.transform.position.y, upRight.z + 1);
+        RightWall.transform.position = new Vector3(upRight.x + 1, RightWall.transform.position.y, RightWall.transform.position.z);
+        DownWall.transform.position  = new Vector3(DownWall.transform.position.x, DownWall.transform.position.y, downLeft.z - 1);
+        LeftWall.transform.position  = new Vector3(downLeft.x - 1, LeftWall.transform.position.y, LeftWall.transform.position.z);
+
+        UpWall.transform.localScale    = new Vector3(aCurrentLevelData.LevelLayout.x + 2, 1.0f, 1);
+        RightWall.transform.localScale = new Vector3(1, 1.0f, aCurrentLevelData.LevelLayout.y + 2);
+        LeftWall.transform.localScale  = new Vector3(1, 1.0f, aCurrentLevelData.LevelLayout.y + 2);
+        DownWall.transform.localScale  = new Vector3(aCurrentLevelData.LevelLayout.x + 2, 1.0f, 1);
+
+        foreach (var OneItem in aCurrentLevelData.DefaultModule)
+        {
+            RequestSpawnModule(OneItem);
+        }
+
         aIsSetUpFinish = true;
     }
-
     public void ClearLevel()
     {
         
     }
-
     public void ResetLevel()
     {
         
@@ -46,40 +72,114 @@ public class ModuleManager : Singleton<ModuleManager>
 
     public ModuleBase GetUpModule(Vector2 iModuleIndex)
     {
-        if (!aIsSetUpFinish) { return null; }
+        if (!aIsSetUpFinish)                                   { return null; }
+        if (iModuleIndex.y == aCurrentLevelData.LevelLayout.y) { return null; }
+
+        ModuleBase hasValue = null;
+        if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x, iModuleIndex.y + 1), out hasValue))
+        {
+            return hasValue;
+        }
         return null;
     }
-
     public ModuleBase GetDownModule(Vector2 iModuleIndex)
     {
-        if (!aIsSetUpFinish) { return null; }
+        if (!aIsSetUpFinish)     { return null; }
+        if (iModuleIndex.y == 1) { return null; }
+
+        ModuleBase hasValue = null;
+        if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x, iModuleIndex.y - 1), out hasValue))
+        {
+            return hasValue;
+        }
         return null;
     }
-
     public ModuleBase GetLeftModule(Vector2 iModuleIndex)
     {
-        if (!aIsSetUpFinish) { return null; }
+        if (!aIsSetUpFinish)     { return null; }
+        if (iModuleIndex.y == 1) { return null; }
+
+        ModuleBase hasValue = null;
+        if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x - 1, iModuleIndex.y), out hasValue))
+        {
+            return hasValue;
+        }
         return null;
     }
     public ModuleBase GetRightModule(Vector2 iModuleIndex)
     {
-        if (!aIsSetUpFinish) { return null; }
+        if (!aIsSetUpFinish)                                   { return null; }
+        if (iModuleIndex.y == aCurrentLevelData.LevelLayout.x) { return null; }
+
+        ModuleBase hasValue = null;
+        if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x + 1, iModuleIndex.y), out hasValue))
+        {
+            return hasValue;
+        }
         return null;
+    }
+
+
+
+    public ModuleBase RequestSpawnModule(ModuleData iModuleData, ModuleBase iCreater = null)
+    {
+        foreach(ModuleReference reference in ModuleReferenceObject.ModuleReferenceData)
+        {
+            if (reference.ModuleType == iModuleData.ModuleType)
+            {
+                Vector3 SpawnPos = new Vector3(0, 0, 0);
+
+                if (iCreater!=null)
+                {
+                    SpawnPos = iCreater.transform.position;
+                    GameObject newObj = Instantiate(reference.ObjectReference, SpawnPos, Quaternion.identity);
+                    ModuleBase newModule = newObj.GetComponent<ModuleBase>();
+                    newModule.InitModule(iModuleData);
+                    aAllModule.Add(newModule);
+                    return newModule;
+                }
+
+                if(aModulePositionData.TryGetValue(iModuleData.SetUpIndex, out SpawnPos))
+                {
+                    GameObject newObj    = Instantiate(reference.ObjectReference, SpawnPos, Quaternion.identity);
+                    ModuleBase newModule = newObj.GetComponent<ModuleBase>();
+                    newModule.InitModule(iModuleData);
+                    aSetUpModuleList.Add(iModuleData.SetUpIndex, newModule);
+                    aAllModule.Add(newModule);
+                    newModule.SetUpModule();
+                    return newModule;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void RequestDestoryModule(ModuleBase iModuleBase)
+    {
+        aAllModule.Remove(iModuleBase);
+        Destroy(iModuleBase.gameObject);
     }
 
     public bool RequestModuleUpdate(ModuleBase iTargetModule)
     {
         if (!aIsSetUpFinish) { return false; }
-        if (aUpdatedModule.ContainsKey(iTargetModule))
+
+        foreach (var module in aAllModule)
         {
-            bool hasUpdated = false;
-            if (aUpdatedModule.TryGetValue(iTargetModule, out hasUpdated))
+            if (module == iTargetModule)
             {
+                bool hasUpdated = false;
+                foreach (var updatedModule in aUpdatedModule)
+                {
+                    if(module == updatedModule)
+                    {
+                        hasUpdated = true;
+                    }
+                }
                 if (!hasUpdated)
                 {
                     iTargetModule.UpdateModule();
-                    aUpdatedModule.Remove(iTargetModule);
-                    aUpdatedModule.Add(iTargetModule, true);
+                    aUpdatedModule.Add(iTargetModule);
                     return true;
                 }
             }
@@ -90,13 +190,25 @@ public class ModuleManager : Singleton<ModuleManager>
     public void ModuleAutoUpdate()
     {
         if (!aIsSetUpFinish) { return; }
-        foreach (var OneItem in aModuleList)
+        aUpdatedModule.Clear();
+
+        for (int i = 0; i < aAllModule.Count; i++)
         {
-            ModuleBase hasValue = null;
-            aModuleList.TryGetValue(OneItem.Key, out hasValue);
-            if (hasValue && hasValue.AutoUpdateModule)
+            if (aAllModule[i].AutoUpdateModule)
             {
-                RequestModuleUpdate(hasValue);
+                bool hasUpdated = false;
+                for (int j = 0; j < aUpdatedModule.Count; j++)
+                {
+                    if (aAllModule[i] == aUpdatedModule[j])
+                    {
+                        hasUpdated = true;
+                    }
+                }
+                if (!hasUpdated)
+                {
+                    aAllModule[i].UpdateModule();
+                    aUpdatedModule.Add(aAllModule[i]);
+                }
             }
         }
     }
@@ -167,7 +279,7 @@ public class ModuleManager : Singleton<ModuleManager>
                     zPosition = ((i / horizontalCount)) - (verticalCount / 2) * MODULE_SIZE;
                 }
             }
-            aModulePositionData.Add(new Vector2(i % horizontalCount + 1, i / horizontalCount + 1), new Vector2(xPosition, zPosition));
+            aModulePositionData.Add(new Vector2(i % horizontalCount + 1, i / horizontalCount + 1), new Vector3(xPosition, MODULE_HIGH, zPosition));
         }
 
     }
@@ -177,13 +289,15 @@ public class ModuleManager : Singleton<ModuleManager>
     //-----------------------------------------------------------------------
     private bool      aIsSetUpFinish;
     private LevelData aCurrentLevelData;
-    private Dictionary<Vector2, ModuleBase> aModuleList         = new Dictionary<Vector2, ModuleBase>( );
-    private Dictionary<Vector2, Vector2>    aModulePositionData = new Dictionary<Vector2, Vector2>();
-    private Dictionary<ModuleBase, bool>    aUpdatedModule      = new Dictionary<ModuleBase, bool>();
+    private Dictionary<Vector2, ModuleBase> aSetUpModuleList         = new Dictionary<Vector2, ModuleBase>( );
+    private Dictionary<Vector2, Vector3>    aModulePositionData = new Dictionary<Vector2, Vector3>();
+    private List<ModuleBase>                aAllModule             = new List<ModuleBase>();
+    private List<ModuleBase>                aUpdatedModule         = new List<ModuleBase>();
 
     //-----------------------------------------------------------------------
     // Const
     //-----------------------------------------------------------------------
     private const float MODULE_SIZE = 1.0f;
+    private const float MODULE_HIGH = 0.0f;
 
 }

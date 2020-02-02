@@ -14,15 +14,113 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelData:
     LevelName: 
-    LevelLayout: {x: 13, y: 9}
+    LevelLayout: {x: 8, y: 6}
     SteamStartTimer: 20
     SteamBreakTimer: 10
     DefaultModule:
-    - ModuleType: 0
-      SetUpIndex: {x: 0, y: 0}
-      ModuleDirection: 0
-      ModleCreateTimer: {x: 0, y: 0}
-      ModleCreateList: []
+    - ModuleType: 1
+      SetUpIndex: {x: 2, y: 1}
+      ModuleDirection: 3
+      ModuleCreateTimer: {x: 1, y: 3}
+      ModuleCreateList:
+      - ModuleCreateRaito: 10
+        ModuleType: 10
+      - ModuleCreateRaito: 10
+        ModuleType: 11
+      - ModuleCreateRaito: 5
+        ModuleType: 12
+      - ModuleCreateRaito: 3
+        ModuleType: 13
+      - ModuleCreateRaito: 20
+        ModuleType: 14
+      ConveyorSpeed: 2
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 3
+      SetUpIndex: {x: 3, y: 1}
+      ModuleDirection: 15
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 2
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 3
+      SetUpIndex: {x: 4, y: 1}
+      ModuleDirection: 15
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 2
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 2
+      SetUpIndex: {x: 7, y: 1}
+      ModuleDirection: 2
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
       ConveyorSpeed: 10
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 8
+      SetUpIndex: {x: 1, y: 4}
+      ModuleDirection: 3
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 10
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 9
+      SetUpIndex: {x: 8, y: 4}
+      ModuleDirection: 2
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 10
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 3
+      SetUpIndex: {x: 5, y: 1}
+      ModuleDirection: 15
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 2
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 3
+      SetUpIndex: {x: 6, y: 1}
+      ModuleDirection: 15
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 2
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 5
+      SetUpIndex: {x: 3, y: 4}
+      ModuleDirection: 1
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 2
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 5
+      SetUpIndex: {x: 4, y: 4}
+      ModuleDirection: 1
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 2
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 5
+      SetUpIndex: {x: 5, y: 4}
+      ModuleDirection: 1
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 2
+      BossTimer: {x: 60, y: 90}
+      BossMessBost: 2
+    - ModuleType: 5
+      SetUpIndex: {x: 6, y: 4}
+      ModuleDirection: 1
+      ModuleCreateTimer: {x: 3, y: 4.5}
+      ModuleCreateList: []
+      ConveyorSpeed: 2
       BossTimer: {x: 60, y: 90}
       BossMessBost: 2
