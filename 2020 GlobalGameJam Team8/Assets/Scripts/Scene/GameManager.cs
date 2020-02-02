@@ -134,7 +134,7 @@ public class GameManager : Singleton<GameManager>
     private void GameOver()
     {
         aGameState = GameState.GameOver;
-        Debug.Log("YOU DIE!!!!");
+        mainUI.Lose();
     }
 
     /// <summary>

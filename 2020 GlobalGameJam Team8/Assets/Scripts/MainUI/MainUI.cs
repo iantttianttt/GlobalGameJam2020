@@ -7,6 +7,9 @@ public class MainUI : MonoBehaviour
 {
     public Image Bar;
     public Image Pointer;
+    public GameObject GameOver;
+    public GameObject YouWin;
+
     void Start()
     {
         
@@ -24,5 +27,15 @@ public class MainUI : MonoBehaviour
     {
         Bar.fillAmount = pressure/ maxPressure;
         Pointer.rectTransform.eulerAngles=new Vector3(0, 0, pressure / maxPressure * -140);
+    }
+
+    public void Win()
+    {
+        YouWin.SetActive(true);
+    }
+
+    public void Lose()
+    {
+        GameOver.SetActive(true);
     }
 }
