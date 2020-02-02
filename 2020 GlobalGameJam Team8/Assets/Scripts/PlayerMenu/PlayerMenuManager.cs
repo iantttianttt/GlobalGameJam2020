@@ -44,7 +44,7 @@ public class PlayerMenuManager : MonoBehaviour
         CheckControllerPlugged(P3, p3Image);
         CheckControllerPlugged(P4, p4Image);
 
-        if (PlayerManager.Instance.players.Count > 1)
+        if (PlayerManager.Instance.players.Count > 0)
         {
             CheckGameStart();
         }
