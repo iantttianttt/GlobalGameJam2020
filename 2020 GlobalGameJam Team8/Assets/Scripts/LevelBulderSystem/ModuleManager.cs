@@ -14,16 +14,16 @@ public class ModuleManager : Singleton<ModuleManager>
     // Get
     //-----------------------------------------------------------------------
     public bool      GetIsSetUpFinish    { get { return aIsSetUpFinish;    }}
-    public LevelData GetCurrentLevelData { get { return aCurrentLevelData; }} //TODO
+    public LevelData  GetCurrentLevelData { get { return aCurrentLevelData; }} //TODO
     public GameObject Floor;
     public GameObject UpWall;
     public GameObject LeftWall;
     public GameObject RightWall;
     public GameObject DownWall;
-
-    public LevelDataObject AA;
     public ModuleReferenceObject ModuleReferenceObject;
     public Dictionary<Vector2, Vector3> ModulePositionData { get { return aModulePositionData; } }
+
+    public bool Updateing;
 
     //-----------------------------------------------------------------------
     //Public Function
@@ -78,7 +78,13 @@ public class ModuleManager : Singleton<ModuleManager>
         ModuleBase hasValue = null;
         if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x, iModuleIndex.y + 1), out hasValue))
         {
-            return hasValue;
+            foreach (ModuleDirection linkDir in hasValue.ModuleLinkDirection)
+            {
+                if (linkDir == ModuleDirection.DOWN)
+                {
+                    return hasValue;
+                }
+            }
         }
         return null;
     }
@@ -90,7 +96,13 @@ public class ModuleManager : Singleton<ModuleManager>
         ModuleBase hasValue = null;
         if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x, iModuleIndex.y - 1), out hasValue))
         {
-            return hasValue;
+            foreach (ModuleDirection linkDir in hasValue.ModuleLinkDirection)
+            {
+                if (linkDir == ModuleDirection.UP)
+                {
+                    return hasValue;
+                }
+            }
         }
         return null;
     }
@@ -102,7 +114,13 @@ public class ModuleManager : Singleton<ModuleManager>
         ModuleBase hasValue = null;
         if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x - 1, iModuleIndex.y), out hasValue))
         {
-            return hasValue;
+            foreach (ModuleDirection linkDir in hasValue.ModuleLinkDirection)
+            {
+                if (linkDir == ModuleDirection.RIGHT)
+                {
+                    return hasValue;
+                }
+            }
         }
         return null;
     }
@@ -114,7 +132,13 @@ public class ModuleManager : Singleton<ModuleManager>
         ModuleBase hasValue = null;
         if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x + 1, iModuleIndex.y), out hasValue))
         {
-            return hasValue;
+            foreach (ModuleDirection linkDir in hasValue.ModuleLinkDirection)
+            {
+                if (linkDir == ModuleDirection.LEFT)
+                {
+                    return hasValue;
+                }
+            }
         }
         return null;
     }
@@ -162,27 +186,22 @@ public class ModuleManager : Singleton<ModuleManager>
 
     public bool RequestModuleUpdate(ModuleBase iTargetModule)
     {
-        if (!aIsSetUpFinish) { return false; }
+        if (!aIsSetUpFinish)       { return false; }
+        if (iTargetModule == null) { return false; }
 
-        foreach (var module in aAllModule)
+        bool hasUpdated = false;
+        foreach (var updatedModule in aUpdatedModule)
         {
-            if (module == iTargetModule)
+            if (iTargetModule == updatedModule)
             {
-                bool hasUpdated = false;
-                foreach (var updatedModule in aUpdatedModule)
-                {
-                    if(module == updatedModule)
-                    {
-                        hasUpdated = true;
-                    }
-                }
-                if (!hasUpdated)
-                {
-                    iTargetModule.UpdateModule();
-                    aUpdatedModule.Add(iTargetModule);
-                    return true;
-                }
+                hasUpdated = true;
             }
+        }
+        if (!hasUpdated)
+        {
+            iTargetModule.UpdateModule();
+            aUpdatedModule.Add(iTargetModule);
+            return true;
         }
         return false;
     }
@@ -289,10 +308,12 @@ public class ModuleManager : Singleton<ModuleManager>
     //-----------------------------------------------------------------------
     private bool      aIsSetUpFinish;
     private LevelData aCurrentLevelData;
-    private Dictionary<Vector2, ModuleBase> aSetUpModuleList         = new Dictionary<Vector2, ModuleBase>( );
-    private Dictionary<Vector2, Vector3>    aModulePositionData = new Dictionary<Vector2, Vector3>();
-    private List<ModuleBase>                aAllModule             = new List<ModuleBase>();
-    private List<ModuleBase>                aUpdatedModule         = new List<ModuleBase>();
+    private Dictionary<Vector2, ModuleBase> aSetUpModuleList        = new Dictionary<Vector2, ModuleBase>( );
+    private Dictionary<Vector2, Vector3>    aModulePositionData     = new Dictionary<Vector2, Vector3>();
+    private List<ModuleBase>                aAllModule              = new List<ModuleBase>();
+    private List<ModuleBase>                aUpdatedModule          = new List<ModuleBase>();
+
+
 
     //-----------------------------------------------------------------------
     // Const

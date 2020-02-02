@@ -12,6 +12,7 @@ public class ModuleBase : MonoBehaviour
     //-----------------------------------------------------------------------
     // Get
     //-----------------------------------------------------------------------
+    public List<ModuleDirection> ModuleLinkDirection { get { return aModuleLinkDirection; } }
     public bool            AutoUpdateModule { get { return aAutoUpdate; } }
     public bool            IsOnConveyor     { get { return aIsOnConveyor;    } set { aIsOnConveyor = value; } }
     public float           ConveyorSpeed    { get { return aConveyorSpeed;   } set { aConveyorSpeed = value; } }
@@ -49,6 +50,7 @@ public class ModuleBase : MonoBehaviour
     {
         if (aIsOnConveyor && aConveyorTarget.Count != 0)
         {
+            this.gameObject.GetComponent<Collider>().isTrigger = true;
             transform.position = Vector3.MoveTowards(transform.position, aConveyorTarget[0], Time.deltaTime * aConveyorSpeed);
             if (Vector3.Distance(transform.position, aConveyorTarget[0]) < STOP_CONVEYOR_MOVE_DISTANCE)
             {
@@ -126,9 +128,10 @@ public class ModuleBase : MonoBehaviour
     // Private Parameter
     //-----------------------------------------------------------------------
 
-    protected Vector2         aModuleIndex;
-    protected ModuleDirection aModuleDirection;
-    protected bool            aAutoUpdate = true;
+    protected Vector2               aModuleIndex;
+    protected ModuleDirection       aModuleDirection;
+    protected List<ModuleDirection> aModuleLinkDirection;
+    protected bool                  aAutoUpdate = true;
 
     protected bool            aIsOnConveyor;
     protected List<Vector3>   aConveyorTarget = new List<Vector3>();

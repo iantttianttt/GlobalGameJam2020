@@ -8,6 +8,7 @@ public class ModuleTube_Start: ModuleBase
 	{
 		base.InitModule(iModuleData);
 		aAutoUpdate = false;
+		GameManager.Instance.ModuleTube_Start = this;
 	}
 
 	public override void UpdateModule()
@@ -23,7 +24,8 @@ public class ModuleTube_Start: ModuleBase
 				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(aModuleIndex));
 				break;
 			case ModuleDirection.LEFT:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(aModuleIndex)); break;
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(aModuleIndex)); 
+				break;
 			case ModuleDirection.RIGHT:
 				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(aModuleIndex));
 				break;
