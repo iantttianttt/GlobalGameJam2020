@@ -22,6 +22,8 @@ public class ModuleManager : Singleton<ModuleManager>
     public GameObject DownWall;
     public ModuleReferenceObject ModuleReferenceObject;
     public Dictionary<Vector2, Vector3> ModulePositionData { get { return aModulePositionData; } }
+    public Dictionary<Vector2, ModuleBase> SetUpModuleList { get { return aSetUpModuleList; } }
+
 
     public bool Updateing;
 
@@ -144,6 +146,22 @@ public class ModuleManager : Singleton<ModuleManager>
     }
 
 
+    public Vector2 GetClosestIndexDictionary(Vector3 iCurrentPos)
+    {
+        Vector2 targetIndex = new Vector2(0, 0);
+        float closestDis    = 99999.0f;
+        foreach (var OneItem in aModulePositionData)
+        {
+            float newDis = Vector3.Distance(iCurrentPos, OneItem.Value);
+            if(newDis < closestDis)
+            {
+                targetIndex = OneItem.Key;
+                closestDis  = newDis;
+            }
+        }
+        return targetIndex;
+    }
+
 
     public ModuleBase RequestSpawnModule(ModuleData iModuleData, ModuleBase iCreater = null)
     {
@@ -168,9 +186,12 @@ public class ModuleManager : Singleton<ModuleManager>
                     GameObject newObj    = Instantiate(reference.ObjectReference, SpawnPos, Quaternion.identity);
                     ModuleBase newModule = newObj.GetComponent<ModuleBase>();
                     newModule.InitModule(iModuleData);
-                    aSetUpModuleList.Add(iModuleData.SetUpIndex, newModule);
                     aAllModule.Add(newModule);
-                    newModule.SetUpModule();
+                    newModule.SetUpModule(iModuleData.SetUpIndex,true);
+                    if (newModule.ModuleType != ModuleType.PLAYER_SPAWN_POINT)
+                    {
+                        aSetUpModuleList.Add(iModuleData.SetUpIndex, newModule);
+                    }
                     return newModule;
                 }
             }
@@ -186,6 +207,7 @@ public class ModuleManager : Singleton<ModuleManager>
 
     public bool RequestModuleUpdate(ModuleBase iTargetModule)
     {
+        Debug.LogWarning("AAAAAAAAAAAAAAAAAAAAAA" + iTargetModule);
         if (!aIsSetUpFinish)       { return false; }
         if (iTargetModule == null) { return false; }
 
@@ -199,6 +221,7 @@ public class ModuleManager : Singleton<ModuleManager>
         }
         if (!hasUpdated)
         {
+            Debug.LogWarning(iTargetModule);
             iTargetModule.UpdateModule();
             aUpdatedModule.Add(iTargetModule);
             return true;

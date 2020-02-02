@@ -35,10 +35,6 @@ public class ModuleConveyor : ModuleBase
 		}
 	}
 
-	public override void SetUpModule()
-	{
-		base.SetUpModule();
-	}
 
 	public override void UpdateModule()
 	{

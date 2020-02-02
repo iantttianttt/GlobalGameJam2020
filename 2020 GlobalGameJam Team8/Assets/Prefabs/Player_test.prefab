@@ -364,6 +364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: 0
   speed: 5
+  throwPower: 800
   holdPoint: {fileID: 6289699933557049919}
   RedBody: {fileID: 1451425428410340485}
   YellowBody: {fileID: 3204209187089637453}

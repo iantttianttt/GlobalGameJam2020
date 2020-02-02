@@ -31,7 +31,7 @@ MonoBehaviour:
         ModuleType: 12
       - ModuleCreateRaito: 3
         ModuleType: 13
-      - ModuleCreateRaito: 20
+      - ModuleCreateRaito: 3
         ModuleType: 14
       ConveyorSpeed: 2
       BossTimer: {x: 60, y: 90}

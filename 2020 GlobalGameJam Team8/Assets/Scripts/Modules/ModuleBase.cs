@@ -14,6 +14,8 @@ public class ModuleBase : MonoBehaviour
     //-----------------------------------------------------------------------
     public List<ModuleDirection> ModuleLinkDirection { get { return aModuleLinkDirection; } }
     public bool            AutoUpdateModule { get { return aAutoUpdate; } }
+    public ModuleType      ModuleType       { get { return aModuleType;      } set { aModuleType = value; } }
+
     public bool            IsOnConveyor     { get { return aIsOnConveyor;    } set { aIsOnConveyor = value; } }
     public float           ConveyorSpeed    { get { return aConveyorSpeed;   } set { aConveyorSpeed = value; } }
     public Vector2         ModuleIndex      { get { return aModuleIndex;     } set { aModuleIndex = value; } }
@@ -27,6 +29,7 @@ public class ModuleBase : MonoBehaviour
     {
         aModuleDirection = iModuleData.ModuleDirection;
         aModuleIndex     = iModuleData.SetUpIndex;
+        aModuleType      = iModuleData.ModuleType;
         switch (aModuleDirection)
         {
             case ModuleDirection.DOWN:
@@ -41,9 +44,21 @@ public class ModuleBase : MonoBehaviour
         }
     }
 
-    public virtual void SetUpModule()
+    public virtual void SetUpModule(Vector2 iNewIndex , bool iIsDefaultSetUp = false)
     {
+        if (iIsDefaultSetUp) { return; }
 
+        ModuleBase moduleBase;
+        ModuleManager.Instance.SetUpModuleList.TryGetValue(iNewIndex, out moduleBase);
+        if (moduleBase == null)
+        {
+            ModuleManager.Instance.SetUpModuleList.Add(iNewIndex, this);
+        }
+    }
+
+    public void TakeOutModuleFromConveyor()
+    {
+        aIsOnConveyor = false;
     }
 
     public virtual void UpdateModule()
@@ -130,7 +145,8 @@ public class ModuleBase : MonoBehaviour
 
     protected Vector2               aModuleIndex;
     protected ModuleDirection       aModuleDirection;
-    protected List<ModuleDirection> aModuleLinkDirection;
+    protected ModuleType            aModuleType;
+    public List<ModuleDirection>    aModuleLinkDirection;
     protected bool                  aAutoUpdate = true;
 
     protected bool            aIsOnConveyor;

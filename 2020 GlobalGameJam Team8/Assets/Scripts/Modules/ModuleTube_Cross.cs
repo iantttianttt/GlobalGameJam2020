@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class ModuleTube_Cross : ModuleBase
 {
+	public override void InitModule(ModuleData iModuleData)
+	{
+		base.InitModule(iModuleData);
+		aModuleLinkDirection.Clear();
+		aModuleLinkDirection.Add(ModuleDirection.UP);
+		aModuleLinkDirection.Add(ModuleDirection.DOWN);
+		aModuleLinkDirection.Add(ModuleDirection.LEFT);
+		aModuleLinkDirection.Add(ModuleDirection.RIGHT);
+	}
 
 	public override void UpdateModule()
 	{

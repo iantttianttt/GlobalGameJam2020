@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 手長度(可取得物件以及放置物件的距離)
     /// </summary>
-    private float handLength=1f;
+    private float handLength = 1f;
 
     /// <summary>
     /// 抓住物件時物件的位置
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
                 HoldingModule();
                 break;
             case PlayerState.PutingModule:
-                PutDownModule();
+                //PutDownModule();
                 break;
             case PlayerState.ThrowingModule:
                 ThrowModule();
@@ -118,10 +118,11 @@ public class PlayerController : MonoBehaviour
     {
         if (holdModule)
         {
+            holdModule.gameObject.GetComponent<Collider>().isTrigger = false;
+            holdModule.gameObject.GetComponent<Rigidbody>().useGravity = true;
             holdModule.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             holdModule.gameObject.GetComponent<Rigidbody>().AddForce(((transform.forward + new Vector3(0, 0.7f, 0))) * throwPower);
         }
-        StartCoroutine(ChangeState(0f, PlayerState.Idle));
     }
 
     /// <summary>
@@ -133,12 +134,17 @@ public class PlayerController : MonoBehaviour
 
         if (XCI.GetButtonDown(XboxButton.A, controller))
         {
-            StartCoroutine(ChangeState(0, PlayerState.PutingModule));
+            bool result = PutDownModule();
+            if(result)
+            {
+                curentState = PlayerState.Idle;
+            }
         }
 
         if(XCI.GetButtonDown(XboxButton.B, controller))
         {
-            StartCoroutine(ChangeState(0, PlayerState.ThrowingModule));
+            ThrowModule();
+            curentState = PlayerState.Idle;
         }
 
     }
@@ -146,13 +152,27 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 放下物件
     /// </summary>
-    public void PutDownModule()
+    public bool PutDownModule()
     {
-        Vector3 putDownPos = transform.position + transform.forward* handLength;
-        holdModule.gameObject.transform.position = new Vector3(Mathf.Round(putDownPos.x), 1, Mathf.Round(putDownPos.z));
-        holdModule.GetComponent<Rigidbody>().isKinematic = true;
-        holdModule.gameObject.layer = 9;
-        StartCoroutine(ChangeState(0f, PlayerState.Idle));
+        Vector3 putDownPos  = transform.position + transform.forward* handLength;
+        Vector2 targetIndex = ModuleManager.Instance.GetClosestIndexDictionary(putDownPos);
+        ModuleBase moduleBase = null;
+        ModuleManager.Instance.SetUpModuleList.TryGetValue(targetIndex, out moduleBase);
+        if (moduleBase == null)
+        {
+            Vector3 newPutDownPos;
+            ModuleManager.Instance.ModulePositionData.TryGetValue(targetIndex, out newPutDownPos);
+            holdModule.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            holdModule.gameObject.transform.position = new Vector3(newPutDownPos.x, 0.0f, newPutDownPos.z);
+            Debug.Log("newPutDownPos" + newPutDownPos);
+            holdModule.gameObject.layer = 9;
+            holdModule.gameObject.GetComponent<Collider>().isTrigger   = false;
+            holdModule.gameObject.GetComponent<Rigidbody>().useGravity = false;
+            holdModule.gameObject.GetComponent<ModuleBase>().SetUpModule(targetIndex);
+            GameManager.Instance.ResetPressureTimer();
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -182,7 +202,13 @@ public class PlayerController : MonoBehaviour
             if (XCI.GetButtonDown(XboxButton.A,controller))
             {
                 holdModule = raycastHit.transform.gameObject;
-                StartCoroutine(ChangeState(0, PlayerState.HoldingModule));
+                ModuleBase moduleBase = raycastHit.transform.gameObject.GetComponent<ModuleBase>();
+                if (moduleBase != null)
+                {
+                    moduleBase.TakeOutModuleFromConveyor();
+                }
+                //StartCoroutine(ChangeState(0, PlayerState.HoldingModule));
+                curentState = PlayerState.HoldingModule;
             }
         }
 
