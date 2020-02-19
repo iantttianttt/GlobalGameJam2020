@@ -162,14 +162,14 @@ public class ModuleBase : MonoBehaviour
     // Private Parameter
     //-----------------------------------------------------------------------
 
-    protected Vector2               mModuleIndex;
+    protected Vector2                mModuleIndex;
     protected EModuleDirection       mModuleDirection;
     protected EModuleType            mModuleType;
-    protected List<EModuleDirection> mModuleLinkDirection;
-    protected bool                  mAutoUpdate         = true;
-    protected bool                  mIsOnConveyor;
-    protected List<Vector3>         mConveyorMoveTarget = new List<Vector3>();
-    protected float                 mConveyorSpeed;
+    protected List<EModuleDirection> mModuleLinkDirection = new List<EModuleDirection>();
+    protected bool                   mAutoUpdate          = true;
+    protected bool                   mIsOnConveyor;
+    protected List<Vector3>          mConveyorMoveTarget  = new List<Vector3>();
+    protected float                  mConveyorSpeed;
     /// <summary>
     /// 正在朝向輸送帶的終點刪除器移動
     /// </summary>

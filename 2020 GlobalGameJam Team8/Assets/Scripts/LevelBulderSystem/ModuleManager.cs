@@ -26,10 +26,6 @@ public class ModuleManager : Singleton<ModuleManager>
     public GameObject RightWall;
     public GameObject DownWall;
 
-
-
-
-    public ModuleReferenceObject ModuleReferenceObject;
     public bool Updateing; //TODO ?
 
     //-----------------------------------------------------------------------
@@ -40,8 +36,8 @@ public class ModuleManager : Singleton<ModuleManager>
     /// </summary>
     public void InitModuleManager()
     {
-        mIsSetUpFinish = false;
-        // set ModuleReferenceObject  TODO
+        mIsSetUpFinish         = false;
+        mModuleReferenceObject = Resources.Load<ModuleReferenceObject>(MODULE_REFERENCE_OBJECT_PATH);
         ModulePositionData.Clear();
         SetUpModuleList.Clear();
     }
@@ -205,7 +201,7 @@ public class ModuleManager : Singleton<ModuleManager>
     /// </summary>
     public ModuleBase RequestSpawnModule(ModuleData iModuleData, ModuleBase iCreater = null)
     {
-        foreach(ModuleReference reference in ModuleReferenceObject.ModuleReferenceData)
+        foreach(ModuleReference reference in mModuleReferenceObject.ModuleReferenceData)
         {
             if (reference.ModuleType == iModuleData.ModuleType)
             {
@@ -399,11 +395,14 @@ public class ModuleManager : Singleton<ModuleManager>
     private Dictionary<Vector2, Vector3>    mModulePositionData     = new Dictionary<Vector2, Vector3>();
     private List<ModuleBase>                mAllModule              = new List<ModuleBase>();
     private List<ModuleBase>                mUpdatedModule          = new List<ModuleBase>();
+    private ModuleReferenceObject           mModuleReferenceObject;
+
 
     //-----------------------------------------------------------------------
     // Const
     //-----------------------------------------------------------------------
-    private const float MODULE_SIZE = 1.0f;
-    private const float MODULE_HIGH = 0.0f;
+    private const float  MODULE_SIZE = 1.0f;
+    private const float  MODULE_HIGH = 0.0f;
+    private const string MODULE_REFERENCE_OBJECT_PATH = "System/ModuleReferenceData";
 
 }

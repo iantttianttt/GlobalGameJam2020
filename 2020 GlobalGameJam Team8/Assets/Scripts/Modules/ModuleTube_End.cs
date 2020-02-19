@@ -8,6 +8,7 @@ public class ModuleTube_End : ModuleBase
 	{
 		base.InitModule(iModuleData);
 		mModuleLinkDirection.Clear();
+
 		switch (mModuleDirection)
 		{
 			case EModuleDirection.UP:

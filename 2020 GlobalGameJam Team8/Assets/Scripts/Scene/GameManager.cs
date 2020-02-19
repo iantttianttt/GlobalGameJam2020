@@ -107,10 +107,11 @@ public class GameManager : Singleton<GameManager>
 
     private void InitLevel()
     {
+        ModuleManager.Instance.InitModuleManager();
         ModuleManager.Instance.BuildLevel(LevelDatas[0].LevelData);
         LevelData levelData = ModuleManager.Instance.GetCurrentLevelData;
-        aSteamStartTimer = levelData.SteamStartTimer;
-        aSteamBreakTimer = levelData.SteamBreakTimer;
+        aSteamStartTimer    = levelData.SteamStartTimer;
+        aSteamBreakTimer    = levelData.SteamBreakTimer;
     }
 
     private void SpawnPlayer()
