@@ -14,7 +14,7 @@ public class ModuleManager : Singleton<ModuleManager>
     // Get
     //-----------------------------------------------------------------------
     public bool       GetIsSetUpFinish                     { get { return mIsSetUpFinish;      } }
-    public LevelData  GetCurrentLevelData                  { get { return mCurrentLevelData;   } } //TODO ?
+    public LevelData  GetCurrentLevelData                  { get { return mCurrentLevelData;   } } 
     public Dictionary<Vector2, Vector3> ModulePositionData { get { return mModulePositionData; } }
     public Dictionary<Vector2, ModuleBase> SetUpModuleList { get { return mSetUpModuleList;    } }
 
@@ -41,7 +41,7 @@ public class ModuleManager : Singleton<ModuleManager>
     public void InitModuleManager()
     {
         mIsSetUpFinish = false;
-        // set ModuleReferenceObject
+        // set ModuleReferenceObject  TODO
         ModulePositionData.Clear();
         SetUpModuleList.Clear();
     }
