@@ -20,15 +20,36 @@ public class PlayerInfo
     public bool isSpawned=false;
 
     /// <summary>
-    /// 玩家控制器
+    /// 玩家控制器種類
     /// </summary>
-    public XboxController controller;
+    public ControllerType controllerType;
 
-    public PlayerInfo(XboxController _controller)
+    public ColorType color;
+
+    public PlayerInfo(ControllerType _controllerType, ColorType _color)
     {
-        controller = _controller;
+        controllerType = _controllerType;
+        color = _color;
     }
 }
+
+public enum ColorType { 
+    Red=0,
+    Blue=1,
+    Yellow=2,
+    Green=3
+}
+
+public enum ControllerType
+{    
+    Xbox_First,
+    Xbox_Second,
+    Xbox_Third,
+    Xbox_Fourth,
+    Keyboard1,
+    Keyboard2
+}
+
 /// <summary>
 /// 玩家管理員
 /// </summary>
@@ -51,9 +72,20 @@ public class PlayerManager : Singleton<PlayerManager>
     /// 新增玩家
     /// </summary>
     /// <param name="player"></param>
-    public void AddPlayer(PlayerInfo player)
+    public void AddPlayer(ControllerType _controllerType)
     {
-        players.Add(player);
+        ColorType _color;
+
+        if(players.Find((x) => x.color == ColorType.Red)==null)
+            _color = ColorType.Red;
+        else if(players.Find((x) => x.color == ColorType.Yellow) == null)
+            _color = ColorType.Yellow;        
+        else if(players.Find((x) => x.color == ColorType.Green) == null)
+            _color = ColorType.Green;        
+        else
+            _color = ColorType.Blue;
+        players.Add(new PlayerInfo(_controllerType, _color));
+
     }   
 
     /// <summary>
@@ -65,4 +97,8 @@ public class PlayerManager : Singleton<PlayerManager>
         players.Remove(player);
     }
 
+    public PlayerInfo SearchPlayer(ControllerType _controllerType)
+    {
+        return players.Find((x) => x.controllerType == _controllerType);
+    }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XboxCtrlrInput;
 
 /// <summary>
 /// 玩家控制程式
@@ -12,7 +11,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 控制器
     /// </summary>
-    public XboxController controller;
+    public IController controller;
 
     /// <summary>
     /// 當前狀態
@@ -64,24 +63,33 @@ public class PlayerController : MonoBehaviour
             if (!PlayerManager.Instance.players[i].isSpawned)
             {
                 PlayerManager.Instance.players[i].isSpawned = true;
-                controller = PlayerManager.Instance.players[i].controller;
+
+                ///設定控制器
+                if (PlayerManager.Instance.players[i].controllerType == ControllerType.Keyboard1
+                    || PlayerManager.Instance.players[i].controllerType == ControllerType.Keyboard2)
+                    controller = new KeyboardController(PlayerManager.Instance.players[i].controllerType);
+                else
+                    controller = new JoystickController(PlayerManager.Instance.players[i].controllerType);
+
+                ///設定模組顏色
+                switch (PlayerManager.Instance.players[i].color)
+                {
+                    case ColorType.Red:
+                        RedBody.SetActive(true);
+                        break;
+                    case ColorType.Blue:
+                        BlueBody.SetActive(true);
+                        break;
+                    case ColorType.Yellow:
+                        YellowBody.SetActive(true);
+                        break;
+                    case ColorType.Green:
+                        GreenBody.SetActive(true);
+                        break;
+                }
+
                 break;
             }
-        }
-
-        switch (controller) {
-            case XboxController.First:
-                RedBody.SetActive(true);
-                break;
-            case XboxController.Second:
-                YellowBody.SetActive(true);
-                break;
-            case XboxController.Third:
-                GreenBody.SetActive(true);
-                break;
-            case XboxController.Fourth:
-                BlueBody.SetActive(true);
-                break;
         }
 
     }
@@ -132,7 +140,7 @@ public class PlayerController : MonoBehaviour
     {
         holdModule.gameObject.transform.position = holdPoint.transform.position;
 
-        if (XCI.GetButtonDown(XboxButton.A, controller))
+        if (controller.PressButtonA())
         {
             bool result = PutDownModule();
             if(result)
@@ -141,7 +149,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(XCI.GetButtonDown(XboxButton.B, controller))
+        if(controller.PressButtonB())
         {
             ThrowModule();
             curentState = PlayerState.Idle;
@@ -158,7 +166,7 @@ public class PlayerController : MonoBehaviour
         Vector2 targetIndex = ModuleManager.Instance.GetClosestIndexDictionary(putDownPos);
         ModuleBase moduleBase = null;
         ModuleManager.Instance.SetUpModuleList.TryGetValue(targetIndex, out moduleBase);
-        if (moduleBase == null && holdModule.gameObject.GetComponent<ModuleBase>().ModuleType != ModuleType.HAMMER)
+        if (moduleBase == null && holdModule.gameObject.GetComponent<ModuleBase>().ModuleType !=  EModuleType.HAMMER)
         {
             Vector3 newPutDownPos;
             ModuleManager.Instance.ModulePositionData.TryGetValue(targetIndex, out newPutDownPos);
@@ -171,7 +179,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.ResetPressureTimer();
             return true;
         }
-        else if (moduleBase != null && holdModule.gameObject.GetComponent<ModuleBase>().ModuleType == ModuleType.HAMMER)
+        else if (moduleBase != null && holdModule.gameObject.GetComponent<ModuleBase>().ModuleType == EModuleType.HAMMER)
         {
             ModuleManager.Instance.RequestDestoryModule(moduleBase);
             ModuleManager.Instance.RequestDestoryModule(holdModule.gameObject.GetComponent<ModuleBase>());
@@ -185,8 +193,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Movement()
     {
-        float horizontal = XCI.GetAxis(XboxAxis.LeftStickX, controller);
-        float vertical = XCI.GetAxis(XboxAxis.LeftStickY, controller);
+        float horizontal = controller.Horizontal();
+        float vertical = controller.Vertical();
         rb.velocity = new Vector3(horizontal, 0, vertical) * speed;
 
         if (Mathf.Abs(horizontal) + Mathf.Abs(vertical) > 0.3f)
@@ -204,7 +212,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit raycastHit;
         if(Physics.Raycast(ray,out raycastHit, handLength, 1 << 8)){
 
-            if (XCI.GetButtonDown(XboxButton.A,controller))
+            if (controller.PressButtonA())
             {
                 holdModule = raycastHit.transform.gameObject;
                 ModuleBase moduleBase = raycastHit.transform.gameObject.GetComponent<ModuleBase>();

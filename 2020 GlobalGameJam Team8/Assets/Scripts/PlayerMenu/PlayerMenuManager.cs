@@ -8,10 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMenuManager : MonoBehaviour
 {
-    private PlayerInfo P1;
-    private PlayerInfo P2;
-    private PlayerInfo P3;
-    private PlayerInfo P4;
 
     public Image p1Image;
     public Image p2Image;
@@ -33,129 +29,122 @@ public class PlayerMenuManager : MonoBehaviour
 
     void Start()
     {
-        P1 = new PlayerInfo(XboxController.First);
-        P2 = new PlayerInfo(XboxController.Second);
-        P3 = new PlayerInfo(XboxController.Third);
-        P4 = new PlayerInfo(XboxController.Fourth);
+        
     }
 
     void Update()
     {
-        ///個別檢查控制器是否載入
-        CheckControllerPlugged(P1, p1Image);
-        CheckControllerPlugged(P2, p2Image);
-        CheckControllerPlugged(P3, p3Image);
-        CheckControllerPlugged(P4, p4Image);
 
-        if (PlayerManager.Instance.players.Count > 0)
-        {
-            CheckGameStart();
-        }
+        CheckPlayerReady(ControllerType.Xbox_First);
+        CheckPlayerReady(ControllerType.Xbox_Second);
+        CheckPlayerReady(ControllerType.Xbox_Third);
+        CheckPlayerReady(ControllerType.Xbox_Fourth);
+        CheckPlayerReady(ControllerType.Keyboard1);
+        CheckPlayerReady(ControllerType.Keyboard2);
 
+        SetImage();
 
-       
+        CheckGameStart();
+        
 
     }
 
-    /// <summary>
-    /// 檢查控制器是否載入
-    /// </summary>
-    /// <param name="player">檢查對象</param>
-    /// <param name="image">顯示圖片</param>
-    private void CheckControllerPlugged(PlayerInfo player,Image image)
+    private void SetImage()
     {
-        if(XCI.IsPluggedIn(player.controller))
-        {
-            if(XCI.GetButtonDown(XboxButton.A, player.controller))
-            {
-                ///判定玩家是否加入遊戲
-                if (player.inGame)
-                {
-                    player.inGame = false;
-                    PlayerManager.Instance.RemovePlayer(player);
-                }
-                else
-                {
-                    player.inGame = true;
-                    PlayerManager.Instance.AddPlayer(player);
-                }
-            }
-        }
-        else
-        {
-            player.inGame = false;
-            PlayerManager.Instance.RemovePlayer(player);
-        }
+        p1Image.sprite = p1Sprite_Gray;
+        p2Image.sprite = p2Sprite_Gray;
+        p3Image.sprite = p3Sprite_Gray;
+        p4Image.sprite = p4Sprite_Gray;
 
-        ///調整選單玩家顏色
-        if (player.inGame)
-        {
-            switch (player.controller) {
 
-                case XboxController.First:
-                    image.sprite = p1Sprite;
-                    break;
-                case XboxController.Second:
-                    image.sprite = p2Sprite;
-                    break;
-                case XboxController.Third:
-                    image.sprite = p3Sprite;
-                    break;
-                case XboxController.Fourth:
-                    image.sprite = p4Sprite;
-                    break;
-            }
-        }
-        else
+        foreach (PlayerInfo val in PlayerManager.Instance.players)
         {
-            switch (player.controller)
+            switch (val.color)
             {
-                case XboxController.First:
-                    image.sprite = p1Sprite_Gray;
+                case ColorType.Red:
+                    p1Image.sprite = p1Sprite;
                     break;
-                case XboxController.Second:
-                    image.sprite = p2Sprite_Gray;
+                case ColorType.Yellow:
+                    p2Image.sprite = p2Sprite;
                     break;
-                case XboxController.Third:
-                    image.sprite = p3Sprite_Gray;
+                case ColorType.Green:
+                    p3Image.sprite = p3Sprite;
                     break;
-                case XboxController.Fourth:
-                    image.sprite = p4Sprite_Gray;
+                case ColorType.Blue:
+                    p4Image.sprite = p4Sprite;
                     break;
             }
         }
     }
-       
+
+    private void CheckPlayerReady(ControllerType _controllerType)
+    {
+        bool inButton=false, outButton=false;
+        switch (_controllerType)
+        {
+            case ControllerType.Xbox_First:
+                inButton = XCI.GetButtonDown(XboxButton.A, XboxController.First);
+                outButton = XCI.GetButtonDown(XboxButton.B, XboxController.First);
+                break;
+            case ControllerType.Xbox_Second:
+                inButton = XCI.GetButtonDown(XboxButton.A, XboxController.Second);
+                outButton = XCI.GetButtonDown(XboxButton.B, XboxController.Second);
+                break;
+            case ControllerType.Xbox_Third:
+                inButton = XCI.GetButtonDown(XboxButton.A, XboxController.Third);
+                outButton = XCI.GetButtonDown(XboxButton.B, XboxController.Third);
+                break;
+            case ControllerType.Xbox_Fourth:
+                inButton = XCI.GetButtonDown(XboxButton.A, XboxController.Fourth);
+                outButton = XCI.GetButtonDown(XboxButton.B, XboxController.Fourth);
+                break;
+            case ControllerType.Keyboard1:
+                inButton = Input.GetKeyDown(KeyCode.G);
+                outButton = Input.GetKeyDown(KeyCode.H);
+                break;
+            case ControllerType.Keyboard2:
+                inButton = Input.GetKeyDown(KeyCode.Keypad1);
+                outButton = Input.GetKeyDown(KeyCode.Keypad2);
+                break;
+        }
+
+        if (inButton && PlayerManager.Instance.SearchPlayer(_controllerType) == null)
+            PlayerManager.Instance.AddPlayer(_controllerType);
+        else if (outButton && PlayerManager.Instance.SearchPlayer(_controllerType) != null)
+            PlayerManager.Instance.RemovePlayer(PlayerManager.Instance.SearchPlayer(_controllerType));     
+
+    }
+
+
     /// <summary>
     /// 檢查遊戲是否開始
     /// </summary>
     public void CheckGameStart()
     {
-        foreach(PlayerInfo val in PlayerManager.Instance.players)
+        if (PlayerManager.Instance.players.Count > 0)
         {
-            if (XCI.GetButton(XboxButton.Start, val.controller))
+            if (XCI.GetButton(XboxButton.Start, XboxController.First))
             {
                 GoToGameScene();
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            LevalID = 1;
-            GoToGameScene();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            LevalID = 2;
-            GoToGameScene();
-        }
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                LevalID = 1;
+                GoToGameScene();
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                LevalID = 2;
+                GoToGameScene();
+            }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            LevalID = 3;
-            GoToGameScene();
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                LevalID = 3;
+                GoToGameScene();
+            }
         }
-
     }
 
     /// <summary>
