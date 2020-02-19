@@ -7,23 +7,23 @@ public class ModuleTube_Cross : ModuleBase
 	public override void InitModule(ModuleData iModuleData)
 	{
 		base.InitModule(iModuleData);
-		aModuleLinkDirection.Clear();
-		aModuleLinkDirection.Add(ModuleDirection.UP);
-		aModuleLinkDirection.Add(ModuleDirection.DOWN);
-		aModuleLinkDirection.Add(ModuleDirection.LEFT);
-		aModuleLinkDirection.Add(ModuleDirection.RIGHT);
+		mModuleLinkDirection.Clear();
+		mModuleLinkDirection.Add(EModuleDirection.UP);
+		mModuleLinkDirection.Add(EModuleDirection.DOWN);
+		mModuleLinkDirection.Add(EModuleDirection.LEFT);
+		mModuleLinkDirection.Add(EModuleDirection.RIGHT);
 	}
 
 	public override void UpdateModule()
 	{
 		base.UpdateModule();
-		switch (aModuleDirection)
+		switch (mModuleDirection)
 		{
-			case ModuleDirection.UP:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(aModuleIndex));
+			case EModuleDirection.UP:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(mModuleIndex));
 				break;
 		}
 	}

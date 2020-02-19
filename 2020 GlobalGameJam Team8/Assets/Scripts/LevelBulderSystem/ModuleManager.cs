@@ -13,76 +13,103 @@ public class ModuleManager : Singleton<ModuleManager>
     //-----------------------------------------------------------------------
     // Get
     //-----------------------------------------------------------------------
-    public bool      GetIsSetUpFinish    { get { return aIsSetUpFinish;    }}
-    public LevelData  GetCurrentLevelData { get { return aCurrentLevelData; }} //TODO
+    public bool       GetIsSetUpFinish                     { get { return mIsSetUpFinish;      } }
+    public LevelData  GetCurrentLevelData                  { get { return mCurrentLevelData;   } } //TODO ?
+    public Dictionary<Vector2, Vector3> ModulePositionData { get { return mModulePositionData; } }
+    public Dictionary<Vector2, ModuleBase> SetUpModuleList { get { return mSetUpModuleList;    } }
+
+
+    // TODO 關卡背景生成修正
     public GameObject Floor;
     public GameObject UpWall;
     public GameObject LeftWall;
     public GameObject RightWall;
     public GameObject DownWall;
+
+
+
+
     public ModuleReferenceObject ModuleReferenceObject;
-    public Dictionary<Vector2, Vector3> ModulePositionData { get { return aModulePositionData; } }
-    public Dictionary<Vector2, ModuleBase> SetUpModuleList { get { return aSetUpModuleList; } }
-
-
-    public bool Updateing;
+    public bool Updateing; //TODO ?
 
     //-----------------------------------------------------------------------
-    //Public Function
+    // Public Function
     //-----------------------------------------------------------------------
+    /// <summary>
+    /// 初始化 Module Manager
+    /// </summary>
     public void InitModuleManager()
     {
-        aIsSetUpFinish = false;
+        mIsSetUpFinish = false;
+        // set ModuleReferenceObject
+        ModulePositionData.Clear();
+        SetUpModuleList.Clear();
     }
 
+    /// <summary>
+    /// 設定場景
+    /// </summary>
     public void BuildLevel(LevelData iLevelData)
     {
-        aCurrentLevelData = iLevelData;
-        CalculateModulePositionData(aCurrentLevelData);
+        mCurrentLevelData = iLevelData;
+        CalculateModulePositionData(mCurrentLevelData);
 
-        Floor.transform.localScale = new Vector3(aCurrentLevelData.LevelLayout.x + 2, 1.0f, aCurrentLevelData.LevelLayout.y + 2);
+        // TODO 關卡背景生成修正
+        Floor.transform.localScale = new Vector3(mCurrentLevelData.LevelLayout.x + 2, 1.0f, mCurrentLevelData.LevelLayout.y + 2);
         Vector3 upRight;
         Vector3 downLeft;
-        aModulePositionData.TryGetValue(new Vector2(aCurrentLevelData.LevelLayout.x, aCurrentLevelData.LevelLayout.y), out upRight);
-        aModulePositionData.TryGetValue(new Vector2(1, 1), out downLeft);
+        mModulePositionData.TryGetValue(new Vector2(mCurrentLevelData.LevelLayout.x, mCurrentLevelData.LevelLayout.y), out upRight);
+        mModulePositionData.TryGetValue(new Vector2(1, 1), out downLeft);
         UpWall.transform.position    = new Vector3(UpWall.transform.position.x, UpWall.transform.position.y, upRight.z + 1);
         RightWall.transform.position = new Vector3(upRight.x + 1, RightWall.transform.position.y, RightWall.transform.position.z);
         DownWall.transform.position  = new Vector3(DownWall.transform.position.x, DownWall.transform.position.y, downLeft.z - 1);
         LeftWall.transform.position  = new Vector3(downLeft.x - 1, LeftWall.transform.position.y, LeftWall.transform.position.z);
 
-        UpWall.transform.localScale    = new Vector3(aCurrentLevelData.LevelLayout.x + 2, 1.0f, 1);
-        RightWall.transform.localScale = new Vector3(1, 1.0f, aCurrentLevelData.LevelLayout.y + 2);
-        LeftWall.transform.localScale  = new Vector3(1, 1.0f, aCurrentLevelData.LevelLayout.y + 2);
-        DownWall.transform.localScale  = new Vector3(aCurrentLevelData.LevelLayout.x + 2, 1.0f, 1);
+        UpWall.transform.localScale    = new Vector3(mCurrentLevelData.LevelLayout.x + 2, 1.0f, 1);
+        RightWall.transform.localScale = new Vector3(1, 1.0f, mCurrentLevelData.LevelLayout.y + 2);
+        LeftWall.transform.localScale  = new Vector3(1, 1.0f, mCurrentLevelData.LevelLayout.y + 2);
+        DownWall.transform.localScale  = new Vector3(mCurrentLevelData.LevelLayout.x + 2, 1.0f, 1);
+        // TODO 關卡背景生成修正
 
-        foreach (var OneItem in aCurrentLevelData.DefaultModule)
+        //Setup DefaultModule
+        foreach (var OneItem in mCurrentLevelData.DefaultModule)
         {
             RequestSpawnModule(OneItem);
         }
 
-        aIsSetUpFinish = true;
+        mIsSetUpFinish = true;
     }
+    
+    //------------------------------------
+    // Clear Level
+    //------------------------------------
     public void ClearLevel()
     {
         
     }
+
+    //------------------------------------
+    // Reset Level
+    //------------------------------------
     public void ResetLevel()
     {
         
     }
 
-
+    /// <summary>
+    /// 取得輸入值上方一格模組
+    /// </summary>
     public ModuleBase GetUpModule(Vector2 iModuleIndex)
     {
-        if (!aIsSetUpFinish)                                   { return null; }
-        if (iModuleIndex.y == aCurrentLevelData.LevelLayout.y) { return null; }
+        if (!mIsSetUpFinish)                                   { return null; }
+        if (iModuleIndex.y == mCurrentLevelData.LevelLayout.y) { return null; } //已抵達邊界
 
         ModuleBase hasValue = null;
-        if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x, iModuleIndex.y + 1), out hasValue))
+        if (mSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x, iModuleIndex.y + 1), out hasValue))
         {
-            foreach (ModuleDirection linkDir in hasValue.ModuleLinkDirection)
+            foreach (EModuleDirection linkDir in hasValue.ModuleLinkDirection)
             {
-                if (linkDir == ModuleDirection.DOWN)
+                if (linkDir == EModuleDirection.DOWN)
                 {
                     return hasValue;
                 }
@@ -90,17 +117,20 @@ public class ModuleManager : Singleton<ModuleManager>
         }
         return null;
     }
+    /// <summary>
+    /// 取得輸入值下方一格模組
+    /// </summary>
     public ModuleBase GetDownModule(Vector2 iModuleIndex)
     {
-        if (!aIsSetUpFinish)     { return null; }
-        if (iModuleIndex.y == 1) { return null; }
+        if (!mIsSetUpFinish)     { return null; }
+        if (iModuleIndex.y == 1) { return null; } //已抵達邊界
 
         ModuleBase hasValue = null;
-        if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x, iModuleIndex.y - 1), out hasValue))
+        if (mSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x, iModuleIndex.y - 1), out hasValue))
         {
-            foreach (ModuleDirection linkDir in hasValue.ModuleLinkDirection)
+            foreach (EModuleDirection linkDir in hasValue.ModuleLinkDirection)
             {
-                if (linkDir == ModuleDirection.UP)
+                if (linkDir == EModuleDirection.UP)
                 {
                     return hasValue;
                 }
@@ -108,17 +138,20 @@ public class ModuleManager : Singleton<ModuleManager>
         }
         return null;
     }
+    /// <summary>
+    /// 取得輸入值左方一格模組
+    /// </summary>
     public ModuleBase GetLeftModule(Vector2 iModuleIndex)
     {
-        if (!aIsSetUpFinish)     { return null; }
-        if (iModuleIndex.y == 1) { return null; }
+        if (!mIsSetUpFinish)     { return null; }
+        if (iModuleIndex.y == 1) { return null; } //已抵達邊界
 
         ModuleBase hasValue = null;
-        if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x - 1, iModuleIndex.y), out hasValue))
+        if (mSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x - 1, iModuleIndex.y), out hasValue))
         {
-            foreach (ModuleDirection linkDir in hasValue.ModuleLinkDirection)
+            foreach (EModuleDirection linkDir in hasValue.ModuleLinkDirection)
             {
-                if (linkDir == ModuleDirection.RIGHT)
+                if (linkDir == EModuleDirection.RIGHT)
                 {
                     return hasValue;
                 }
@@ -126,17 +159,20 @@ public class ModuleManager : Singleton<ModuleManager>
         }
         return null;
     }
+    /// <summary>
+    /// 取得輸入值右方一格模組
+    /// </summary>
     public ModuleBase GetRightModule(Vector2 iModuleIndex)
     {
-        if (!aIsSetUpFinish)                                   { return null; }
-        if (iModuleIndex.y == aCurrentLevelData.LevelLayout.x) { return null; }
+        if (!mIsSetUpFinish)                                   { return null; }
+        if (iModuleIndex.y == mCurrentLevelData.LevelLayout.x) { return null; } //已抵達邊界
 
         ModuleBase hasValue = null;
-        if (aSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x + 1, iModuleIndex.y), out hasValue))
+        if (mSetUpModuleList.TryGetValue(new Vector2(iModuleIndex.x + 1, iModuleIndex.y), out hasValue))
         {
-            foreach (ModuleDirection linkDir in hasValue.ModuleLinkDirection)
+            foreach (EModuleDirection linkDir in hasValue.ModuleLinkDirection)
             {
-                if (linkDir == ModuleDirection.LEFT)
+                if (linkDir == EModuleDirection.LEFT)
                 {
                     return hasValue;
                 }
@@ -145,12 +181,14 @@ public class ModuleManager : Singleton<ModuleManager>
         return null;
     }
 
-
+    /// <summary>
+    /// 取得輸入值最近一格模組之格狀定位座標
+    /// </summary>
     public Vector2 GetClosestIndexDictionary(Vector3 iCurrentPos)
     {
         Vector2 targetIndex = new Vector2(0, 0);
-        float closestDis    = 99999.0f;
-        foreach (var OneItem in aModulePositionData)
+        float   closestDis  = 99999.0f;
+        foreach (var OneItem in mModulePositionData)
         {
             float newDis = Vector3.Distance(iCurrentPos, OneItem.Value);
             if(newDis < closestDis)
@@ -162,7 +200,9 @@ public class ModuleManager : Singleton<ModuleManager>
         return targetIndex;
     }
 
-
+    /// <summary>
+    /// 嘗試創建新模組
+    /// </summary>
     public ModuleBase RequestSpawnModule(ModuleData iModuleData, ModuleBase iCreater = null)
     {
         foreach(ModuleReference reference in ModuleReferenceObject.ModuleReferenceData)
@@ -174,23 +214,25 @@ public class ModuleManager : Singleton<ModuleManager>
                 if (iCreater!=null)
                 {
                     SpawnPos = iCreater.transform.position;
+                    // TODO Object Pool
                     GameObject newObj = Instantiate(reference.ObjectReference, SpawnPos, Quaternion.identity);
                     ModuleBase newModule = newObj.GetComponent<ModuleBase>();
                     newModule.InitModule(iModuleData);
-                    aAllModule.Add(newModule);
+                    mAllModule.Add(newModule);
                     return newModule;
                 }
 
-                if(aModulePositionData.TryGetValue(iModuleData.SetUpIndex, out SpawnPos))
+                if(mModulePositionData.TryGetValue(iModuleData.SetUpIndex, out SpawnPos))
                 {
+                    // TODO Object Pool
                     GameObject newObj    = Instantiate(reference.ObjectReference, SpawnPos, Quaternion.identity);
                     ModuleBase newModule = newObj.GetComponent<ModuleBase>();
                     newModule.InitModule(iModuleData);
-                    aAllModule.Add(newModule);
+                    mAllModule.Add(newModule);
                     newModule.SetUpModule(iModuleData.SetUpIndex,true);
-                    if (newModule.ModuleType != ModuleType.PLAYER_SPAWN_POINT)
+                    if (newModule.ModuleType != EModuleType.PLAYER_SPAWN_POINT) //避免玩家生成位置無法放置其他模組
                     {
-                        aSetUpModuleList.Add(iModuleData.SetUpIndex, newModule);
+                        mSetUpModuleList.Add(iModuleData.SetUpIndex, newModule);
                     }
                     return newModule;
                 }
@@ -199,20 +241,35 @@ public class ModuleManager : Singleton<ModuleManager>
         return null;
     }
 
+    /// <summary>
+    /// 嘗試刪除模組
+    /// </summary>
     public void RequestDestoryModule(ModuleBase iModuleBase)
     {
-        aAllModule.Remove(iModuleBase);
-        aSetUpModuleList.Remove(iModuleBase.ModuleIndex);
+        // TODO Object Pool
+        mAllModule.Remove(iModuleBase);
+        mSetUpModuleList.Remove(iModuleBase.ModuleIndex);
         Destroy(iModuleBase.gameObject);
     }
 
+    /// <summary>
+    /// 刪除已更新模組清單
+    /// </summary>
+    public void CleanModuleUpdateList()
+    {
+        mUpdatedModule.Clear();
+    }
+
+    /// <summary>
+    /// 嘗試更新模組
+    /// </summary>
     public bool RequestModuleUpdate(ModuleBase iTargetModule)
     {
-        if (!aIsSetUpFinish)       { return false; }
+        if (!mIsSetUpFinish)       { return false; }
         if (iTargetModule == null) { return false; }
 
         bool hasUpdated = false;
-        foreach (var updatedModule in aUpdatedModule)
+        foreach (var updatedModule in mUpdatedModule)
         {
             if (iTargetModule == updatedModule)
             {
@@ -221,42 +278,50 @@ public class ModuleManager : Singleton<ModuleManager>
         }
         if (!hasUpdated)
         {
-            aUpdatedModule.Add(iTargetModule);
+            mUpdatedModule.Add(iTargetModule);
             iTargetModule.UpdateModule();
             return true;
         }
+        Debug.LogError("Module has been updated this frame.");
         return false;
     }
 
+    /// <summary>
+    /// 更新自動更新模組
+    /// </summary>
     public void ModuleAutoUpdate()
     {
-        if (!aIsSetUpFinish) { return; }
-        aUpdatedModule.Clear();
+        if (!mIsSetUpFinish) { return; }
 
-        for (int i = 0; i < aAllModule.Count; i++)
+        for (int i = 0; i < mAllModule.Count; i++)
         {
-            if (aAllModule[i].AutoUpdateModule)
+            if (mAllModule[i].AutoUpdateModule)
             {
                 bool hasUpdated = false;
-                for (int j = 0; j < aUpdatedModule.Count; j++)
+                for (int j = 0; j < mUpdatedModule.Count; j++)
                 {
-                    if (aAllModule[i] == aUpdatedModule[j])
+                    if (mAllModule[i] == mUpdatedModule[j])
                     {
                         hasUpdated = true;
                     }
                 }
                 if (!hasUpdated)
                 {
-                    aAllModule[i].UpdateModule();
-                    aUpdatedModule.Add(aAllModule[i]);
+                    mAllModule[i].UpdateModule();
+                    mUpdatedModule.Add(mAllModule[i]);
                 }
             }
         }
     }
 
+
+
     //-----------------------------------------------------------------------
     // Private Function
     //-----------------------------------------------------------------------
+    /// <summary>
+    /// 計算並取得所有格狀座標位置
+    /// </summary>
     private void CalculateModulePositionData(LevelData iLevelData)
     {
         int horizontalCount = (int)iLevelData.LevelLayout.x;
@@ -320,7 +385,7 @@ public class ModuleManager : Singleton<ModuleManager>
                     zPosition = ((i / horizontalCount)) - (verticalCount / 2) * MODULE_SIZE;
                 }
             }
-            aModulePositionData.Add(new Vector2(i % horizontalCount + 1, i / horizontalCount + 1), new Vector3(xPosition, MODULE_HIGH, zPosition));
+            mModulePositionData.Add(new Vector2(i % horizontalCount + 1, i / horizontalCount + 1), new Vector3(xPosition, MODULE_HIGH, zPosition));
         }
 
     }
@@ -328,14 +393,12 @@ public class ModuleManager : Singleton<ModuleManager>
     //-----------------------------------------------------------------------
     // Private Parameter
     //-----------------------------------------------------------------------
-    private bool      aIsSetUpFinish;
-    private LevelData aCurrentLevelData;
-    private Dictionary<Vector2, ModuleBase> aSetUpModuleList        = new Dictionary<Vector2, ModuleBase>( );
-    private Dictionary<Vector2, Vector3>    aModulePositionData     = new Dictionary<Vector2, Vector3>();
-    private List<ModuleBase>                aAllModule              = new List<ModuleBase>();
-    private List<ModuleBase>                aUpdatedModule          = new List<ModuleBase>();
-
-
+    private bool                            mIsSetUpFinish;
+    private LevelData                       mCurrentLevelData;
+    private Dictionary<Vector2, ModuleBase> mSetUpModuleList        = new Dictionary<Vector2, ModuleBase>( );
+    private Dictionary<Vector2, Vector3>    mModulePositionData     = new Dictionary<Vector2, Vector3>();
+    private List<ModuleBase>                mAllModule              = new List<ModuleBase>();
+    private List<ModuleBase>                mUpdatedModule          = new List<ModuleBase>();
 
     //-----------------------------------------------------------------------
     // Const

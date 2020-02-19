@@ -7,30 +7,30 @@ public class ModuleTube_T_Type : ModuleBase
 	public override void InitModule(ModuleData iModuleData)
 	{
 		base.InitModule(iModuleData);
-		aModuleLinkDirection.Clear();
-		switch (aModuleDirection)
+		mModuleLinkDirection.Clear();
+		switch (mModuleDirection)
 		{
-			case ModuleDirection.NO_DOWN:
-				aModuleLinkDirection.Add(ModuleDirection.UP);
-				aModuleLinkDirection.Add(ModuleDirection.LEFT);
-				aModuleLinkDirection.Add(ModuleDirection.RIGHT);
+			case EModuleDirection.NO_DOWN:
+				mModuleLinkDirection.Add(EModuleDirection.UP);
+				mModuleLinkDirection.Add(EModuleDirection.LEFT);
+				mModuleLinkDirection.Add(EModuleDirection.RIGHT);
 				break;
-			case ModuleDirection.NO_LEFT:
-				aModuleLinkDirection.Add(ModuleDirection.UP);
-				aModuleLinkDirection.Add(ModuleDirection.DOWN);
-				aModuleLinkDirection.Add(ModuleDirection.RIGHT);
+			case EModuleDirection.NO_LEFT:
+				mModuleLinkDirection.Add(EModuleDirection.UP);
+				mModuleLinkDirection.Add(EModuleDirection.DOWN);
+				mModuleLinkDirection.Add(EModuleDirection.RIGHT);
 				this.gameObject.transform.Rotate(new Vector3(0.0f, 90f, 0.0f));  
 				break;
-			case ModuleDirection.NO_UP:
-				aModuleLinkDirection.Add(ModuleDirection.DOWN);
-				aModuleLinkDirection.Add(ModuleDirection.LEFT);
-				aModuleLinkDirection.Add(ModuleDirection.RIGHT);
+			case EModuleDirection.NO_UP:
+				mModuleLinkDirection.Add(EModuleDirection.DOWN);
+				mModuleLinkDirection.Add(EModuleDirection.LEFT);
+				mModuleLinkDirection.Add(EModuleDirection.RIGHT);
 				this.gameObject.transform.Rotate(new Vector3(0.0f, 180f, 0.0f)); 
 				break;
-			case ModuleDirection.NO_RIGHT:
-				aModuleLinkDirection.Add(ModuleDirection.UP);
-				aModuleLinkDirection.Add(ModuleDirection.DOWN);
-				aModuleLinkDirection.Add(ModuleDirection.LEFT);
+			case EModuleDirection.NO_RIGHT:
+				mModuleLinkDirection.Add(EModuleDirection.UP);
+				mModuleLinkDirection.Add(EModuleDirection.DOWN);
+				mModuleLinkDirection.Add(EModuleDirection.LEFT);
 				this.gameObject.transform.Rotate(new Vector3(0.0f, 270f, 0.0f)); 
 				break;
 		}
@@ -40,27 +40,27 @@ public class ModuleTube_T_Type : ModuleBase
 	{
 		base.UpdateModule();
 
-		switch (aModuleDirection)
+		switch (mModuleDirection)
 		{
-			case ModuleDirection.NO_UP:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(aModuleIndex));
+			case EModuleDirection.NO_UP:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(mModuleIndex));
 				break;
-			case ModuleDirection.NO_RIGHT:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(aModuleIndex));
+			case EModuleDirection.NO_RIGHT:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(mModuleIndex));
 				break;
-			case ModuleDirection.NO_LEFT:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(aModuleIndex));
+			case EModuleDirection.NO_LEFT:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(mModuleIndex));
 				break;
-			case ModuleDirection.NO_DOWN:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(aModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(aModuleIndex));
+			case EModuleDirection.NO_DOWN:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(mModuleIndex));
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(mModuleIndex));
 				break;
 		}
 	}

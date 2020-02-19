@@ -7,7 +7,7 @@ public class Module_Creater : ModuleBase
 	public override void InitModule(ModuleData iModuleData)
 	{
 		base.InitModule(iModuleData);
-		aAutoUpdate = true;
+		mAutoUpdate       = true;
 		ModuleCreateTimer = iModuleData.ModuleCreateTimer;
 		ModuleCreateList  = iModuleData.ModuleCreateList;
 		ConveyorSpeed     = iModuleData.ConveyorSpeed;
@@ -29,7 +29,7 @@ public class Module_Creater : ModuleBase
 	private void SpawnNewModule()
 	{
 		ModuleData targetData = GetSpawnModuleData();
-		if (targetData.ModuleType != ModuleType.NONE)
+		if (targetData.ModuleType != EModuleType.NONE)
 		{
 			ModuleBase newModule = ModuleManager.Instance.RequestSpawnModule(targetData,this);
 			if (newModule == null)
@@ -43,32 +43,32 @@ public class Module_Creater : ModuleBase
 			Vector3 conveyorTarget = new Vector3(0.0f,0.0f, 0.0f);
 			switch (this.ModuleDirection)
 			{
-				case ModuleDirection.UP:
+				case EModuleDirection.UP:
 					if (ModuleManager.Instance.ModulePositionData.TryGetValue(new Vector2(this.ModuleIndex.x, this.ModuleIndex.y + 1), out conveyorTarget))
 					{
 						newModule.AddConveyorTarget(new Vector3(conveyorTarget.x, MODULE_ON_CONVEYOR_HIGH, conveyorTarget.z));
 					}
 					break;
-				case ModuleDirection.DOWN:
+				case EModuleDirection.DOWN:
 					if (ModuleManager.Instance.ModulePositionData.TryGetValue(new Vector2(this.ModuleIndex.x, this.ModuleIndex.y - 1), out conveyorTarget))
 					{
 						newModule.AddConveyorTarget(new Vector3(conveyorTarget.x, MODULE_ON_CONVEYOR_HIGH, conveyorTarget.z));
 					}
 					break;
-				case ModuleDirection.LEFT:
+				case EModuleDirection.LEFT:
 					if (ModuleManager.Instance.ModulePositionData.TryGetValue(new Vector2(this.ModuleIndex.x - 1, this.ModuleIndex.y), out conveyorTarget))
 					{
 						newModule.AddConveyorTarget(new Vector3(conveyorTarget.x, MODULE_ON_CONVEYOR_HIGH, conveyorTarget.z));
 					}
 					break;
-				case ModuleDirection.RIGHT:
+				case EModuleDirection.RIGHT:
 					if (ModuleManager.Instance.ModulePositionData.TryGetValue(new Vector2(this.ModuleIndex.x + 1, this.ModuleIndex.y), out conveyorTarget))
 					{
 						newModule.AddConveyorTarget(new Vector3(conveyorTarget.x, MODULE_ON_CONVEYOR_HIGH, conveyorTarget.z));
 					}
 					break;
 			}
-			newModule.ConveyorSpeed = this.aConveyorSpeed;
+			newModule.ConveyorSpeed = this.mConveyorSpeed;
 		}
 	}
 
@@ -99,32 +99,32 @@ public class Module_Creater : ModuleBase
 		int num = 0;
 		switch (targetModuleData.ModuleType)
 		{
-			case ModuleType.TUBE_LINE:
+			case EModuleType.TUBE_LINE:
 				num = Random.Range(0, 2);
 				switch (num)
 				{
-					case 0: targetModuleData.ModuleDirection = ModuleDirection.UP_TO_DOWN;    break;
-					case 1: targetModuleData.ModuleDirection = ModuleDirection.LEFT_TO_RIGHT; break;
+					case 0: targetModuleData.ModuleDirection = EModuleDirection.UP_TO_DOWN;    break;
+					case 1: targetModuleData.ModuleDirection = EModuleDirection.LEFT_TO_RIGHT; break;
 				}
 				break;
-			case ModuleType.TUBE_L_TYPE:
+			case EModuleType.TUBE_L_TYPE:
 				num = Random.Range(0, 4);
 				switch (num)
 				{
-					case 0: targetModuleData.ModuleDirection = ModuleDirection.UP_TO_RIGHT;   break;
-					case 1: targetModuleData.ModuleDirection = ModuleDirection.RIGHT_TO_DOWN; break;
-					case 2: targetModuleData.ModuleDirection = ModuleDirection.DOWN_TO_LEFT;  break;
-					case 3: targetModuleData.ModuleDirection = ModuleDirection.LEFT_TO_UP;    break;
+					case 0: targetModuleData.ModuleDirection = EModuleDirection.UP_TO_RIGHT;   break;
+					case 1: targetModuleData.ModuleDirection = EModuleDirection.RIGHT_TO_DOWN; break;
+					case 2: targetModuleData.ModuleDirection = EModuleDirection.DOWN_TO_LEFT;  break;
+					case 3: targetModuleData.ModuleDirection = EModuleDirection.LEFT_TO_UP;    break;
 				}
 				break;
-			case ModuleType.TUBE_T_TYPE:
+			case EModuleType.TUBE_T_TYPE:
 				num = Random.Range(0, 4);
 				switch (num)
 				{
-					case 0: targetModuleData.ModuleDirection = ModuleDirection.NO_UP;    break;
-					case 1: targetModuleData.ModuleDirection = ModuleDirection.NO_RIGHT; break;
-					case 2: targetModuleData.ModuleDirection = ModuleDirection.NO_DOWN;  break;
-					case 3: targetModuleData.ModuleDirection = ModuleDirection.NO_LEFT;  break;
+					case 0: targetModuleData.ModuleDirection = EModuleDirection.NO_UP;    break;
+					case 1: targetModuleData.ModuleDirection = EModuleDirection.NO_RIGHT; break;
+					case 2: targetModuleData.ModuleDirection = EModuleDirection.NO_DOWN;  break;
+					case 3: targetModuleData.ModuleDirection = EModuleDirection.NO_LEFT;  break;
 				}
 				break;
 		}

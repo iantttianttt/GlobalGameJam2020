@@ -12,6 +12,6 @@ public class ModuleReferenceObject : ScriptableObject
 [System.Serializable]
 public struct ModuleReference
 {
-	public ModuleType ModuleType;
+	public EModuleType ModuleType;
 	public GameObject ObjectReference;
 }

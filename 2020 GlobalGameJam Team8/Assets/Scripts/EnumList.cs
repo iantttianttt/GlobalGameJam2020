@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ModuleDirection
+public enum EModuleDirection
 {
     UP = 0,
     DOWN,
@@ -27,7 +27,7 @@ public enum ModuleDirection
     NO_RIGHT,
 }
 
-public enum ModuleType
+public enum EModuleType
 {
     NONE = 0,
     MODULE_CREATER,

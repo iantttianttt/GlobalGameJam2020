@@ -67,6 +67,7 @@ public class GameManager : Singleton<GameManager>
                 }
                 break;
             case GameState.FirstSteamTime:
+                ModuleManager.Instance.CleanModuleUpdateList();
                 ModuleManager.Instance.RequestModuleUpdate(ModuleTube_Start);
                 ModuleManager.Instance.ModuleAutoUpdate();
                 aPressureTimer += Time.deltaTime;
@@ -77,6 +78,7 @@ public class GameManager : Singleton<GameManager>
                 }
                 break;
             case GameState.CoreGameTime:
+                ModuleManager.Instance.CleanModuleUpdateList();
                 ModuleManager.Instance.RequestModuleUpdate(ModuleTube_Start);
                 ModuleManager.Instance.ModuleAutoUpdate();
                 aPressureTimer += Time.deltaTime;

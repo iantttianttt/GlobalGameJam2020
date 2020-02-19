@@ -7,7 +7,7 @@ public class ModuleTube_Start: ModuleBase
 	public override void InitModule(ModuleData iModuleData)
 	{
 		base.InitModule(iModuleData);
-		aAutoUpdate = false;
+		mAutoUpdate = false;
 		GameManager.Instance.ModuleTube_Start = this;
 	}
 
@@ -15,19 +15,19 @@ public class ModuleTube_Start: ModuleBase
 	{
 		base.UpdateModule();
 
-		switch (aModuleDirection)
+		switch (mModuleDirection)
 		{
-			case ModuleDirection.UP:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(aModuleIndex));
+			case EModuleDirection.UP:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(mModuleIndex));
 				break;
-			case ModuleDirection.DOWN:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(aModuleIndex));
+			case EModuleDirection.DOWN:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(mModuleIndex));
 				break;
-			case ModuleDirection.LEFT:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(aModuleIndex)); 
+			case EModuleDirection.LEFT:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(mModuleIndex)); 
 				break;
-			case ModuleDirection.RIGHT:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(aModuleIndex));
+			case EModuleDirection.RIGHT:
+				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(mModuleIndex));
 				break;
 		}
 	}

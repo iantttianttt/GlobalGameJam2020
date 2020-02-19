@@ -7,24 +7,24 @@ public class ModuleTube_End : ModuleBase
 	public override void InitModule(ModuleData iModuleData)
 	{
 		base.InitModule(iModuleData);
-		aModuleLinkDirection.Clear();
-		switch (aModuleDirection)
+		mModuleLinkDirection.Clear();
+		switch (mModuleDirection)
 		{
-			case ModuleDirection.UP:
-				aModuleLinkDirection.Add(ModuleDirection.UP);
+			case EModuleDirection.UP:
+				mModuleLinkDirection.Add(EModuleDirection.UP);
 				break;
-			case ModuleDirection.DOWN:
-				aModuleLinkDirection.Add(ModuleDirection.DOWN);
+			case EModuleDirection.DOWN:
+				mModuleLinkDirection.Add(EModuleDirection.DOWN);
 				break;
-			case ModuleDirection.RIGHT:
-				aModuleLinkDirection.Add(ModuleDirection.RIGHT);
+			case EModuleDirection.RIGHT:
+				mModuleLinkDirection.Add(EModuleDirection.RIGHT);
 				break;
-			case ModuleDirection.LEFT:
-				aModuleLinkDirection.Add(ModuleDirection.LEFT);
+			case EModuleDirection.LEFT:
+				mModuleLinkDirection.Add(EModuleDirection.LEFT);
 				break;
 		}
 				
-		aAutoUpdate = false;
+		mAutoUpdate = false;
 	}
 
 
