@@ -124,7 +124,7 @@ public class GameManager : Singleton<GameManager>
 
         for (int i = 0; i < PlayerManager.Instance.players.Count; i++)
         {
-            Instantiate(playerPrefab, new Vector3(playerSqawnPos[i].x, 0.5f, playerSqawnPos[i].y), playerPrefab.transform.rotation);
+            Instantiate(playerPrefab, new Vector3(playerSqawnPos[i].x, 0f, playerSqawnPos[i].y), playerPrefab.transform.rotation);
         }
     }
 

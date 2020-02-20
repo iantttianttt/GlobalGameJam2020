@@ -31,12 +31,14 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 手長度(可取得物件以及放置物件的距離)
     /// </summary>
-    private float handLength = 1f;
+    private float handLength = 0.8f;
 
     /// <summary>
     /// 抓住物件時物件的位置
     /// </summary>
     public GameObject holdPoint;
+
+    public PutDisplay putDisplay;
 
     /// <summary>
     /// 被抓住的物件
@@ -134,11 +136,29 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 拿起物件
+    /// 拿著物件
     /// </summary>
     public void HoldingModule()
     {
         holdModule.gameObject.transform.position = holdPoint.transform.position;
+
+        Vector3 putDownPos = transform.position + transform.forward * handLength;
+        Vector2 targetIndex = ModuleManager.Instance.GetClosestIndexDictionary(putDownPos);
+        Vector3 newPutDownPos;
+        ModuleManager.Instance.ModulePositionData.TryGetValue(targetIndex, out newPutDownPos);
+        ModuleBase moduleBase = null;
+        ModuleManager.Instance.SetUpModuleList.TryGetValue(targetIndex, out moduleBase);
+
+
+
+        if (holdModule.gameObject.GetComponent<ModuleBase>().ModuleType != EModuleType.HAMMER ? moduleBase == null : moduleBase != null)
+            putDisplay.CanPut();
+        else 
+            putDisplay.CanNotPut();
+
+        putDisplay.transform.position = new Vector3(newPutDownPos.x, 0, newPutDownPos.z);
+        putDisplay.transform.eulerAngles= Vector3.zero;
+
 
         if (controller.PressButtonA())
         {
@@ -146,6 +166,7 @@ public class PlayerController : MonoBehaviour
             if(result)
             {
                 curentState = PlayerState.Idle;
+                putDisplay.DisablePutDisplay();
             }
         }
 
@@ -153,6 +174,7 @@ public class PlayerController : MonoBehaviour
         {
             ThrowModule();
             curentState = PlayerState.Idle;
+            putDisplay.DisablePutDisplay();
         }
 
     }
@@ -207,7 +229,7 @@ public class PlayerController : MonoBehaviour
     private void CheckModule()
     {
         Ray ray=new Ray();
-        ray.origin = new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z);
+        ray.origin = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z);
         ray.direction = transform.forward;
         RaycastHit raycastHit;
         if(Physics.Raycast(ray,out raycastHit, handLength, 1 << 8)){
@@ -220,6 +242,7 @@ public class PlayerController : MonoBehaviour
                 {
                     moduleBase.TakeOutModuleFromConveyor();
                 }
+                putDisplay.gameObject.SetActive(true);
                 curentState = PlayerState.HoldingModule;
             }
         }
