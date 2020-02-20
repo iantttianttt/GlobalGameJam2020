@@ -229,7 +229,7 @@ public class PlayerController : MonoBehaviour
     private void CheckModule()
     {
         Ray ray=new Ray();
-        ray.origin = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z);
+        ray.origin = new Vector3(transform.position.x, transform.position.y + 0.7f, transform.position.z);
         ray.direction = transform.forward;
         RaycastHit raycastHit;
         if(Physics.Raycast(ray,out raycastHit, handLength, 1 << 8)){

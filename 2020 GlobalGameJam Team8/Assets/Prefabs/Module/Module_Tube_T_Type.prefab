@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2242779950576681851}
   - component: {fileID: 4254393765990529860}
-  - component: {fileID: 6069215683971955665}
   - component: {fileID: 4837261270752878741}
+  - component: {fileID: 4925576808645746669}
   m_Layer: 8
   m_Name: Module_Tube_T_Type
   m_TagString: Tube
@@ -46,20 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ff6febdb0061a4a8449229c0662bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aModuleLinkDirection: 
---- !u!65 &6069215683971955665
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 191915701198159166}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.81}
-  m_Center: {x: 0, y: 0, z: 0.07}
 --- !u!54 &4837261270752878741
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -76,6 +62,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!136 &4925576808645746669
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191915701198159166}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 0.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8667670346672961130
 PrefabInstance:
   m_ObjectHideFlags: 0

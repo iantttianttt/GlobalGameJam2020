@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5677102043676873431}
   - component: {fileID: 6056989423075894264}
-  - component: {fileID: 7616910096393232115}
   - component: {fileID: 2396090903289628413}
+  - component: {fileID: 8306791813491979362}
   m_Layer: 8
   m_Name: Module_Tube_Cross
   m_TagString: Tube
@@ -46,20 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ccb05a98fd8c5c4d8529a9aa3d93dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aModuleLinkDirection: 
---- !u!65 &7616910096393232115
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2320462660753808058}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2396090903289628413
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -76,6 +62,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!136 &8306791813491979362
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2320462660753808058}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 0.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &806925579409238097
 PrefabInstance:
   m_ObjectHideFlags: 0
