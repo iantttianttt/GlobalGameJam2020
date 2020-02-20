@@ -15,8 +15,8 @@ MonoBehaviour:
   LevelData:
     LevelName: 
     LevelLayout: {x: 8, y: 6}
-    SteamStartTimer: 15
-    SteamBreakTimer: 10
+    SteamStartTimer: 20
+    SteamBreakTimer: 20
     DefaultModule:
     - ModuleType: 1
       SetUpIndex: {x: 2, y: 1}

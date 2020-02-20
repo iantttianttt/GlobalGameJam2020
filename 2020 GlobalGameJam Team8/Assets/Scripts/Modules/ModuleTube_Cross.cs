@@ -17,15 +17,30 @@ public class ModuleTube_Cross : ModuleBase
 	public override void UpdateModule()
 	{
 		base.UpdateModule();
-		switch (mModuleDirection)
+		List<ModuleBase> nextModule = new List<ModuleBase>();
+
+		//取得周邊模組清單
+		nextModule.Add(ModuleManager.Instance.GetUpModule(mModuleIndex));
+		nextModule.Add(ModuleManager.Instance.GetDownModule(mModuleIndex));
+		nextModule.Add(ModuleManager.Instance.GetRightModule(mModuleIndex));
+		nextModule.Add(ModuleManager.Instance.GetLeftModule(mModuleIndex));	
+
+		//更新周邊模組
+		foreach(ModuleBase hasValue in nextModule)
 		{
-			case EModuleDirection.UP:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(mModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(mModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(mModuleIndex));
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(mModuleIndex));
-				break;
+			if(hasValue != null)
+			{
+				ModuleManager.Instance.UpdatingModule.Add(hasValue);
+				bool updateSuss = ModuleManager.Instance.RequestModuleUpdate(hasValue);
+				if(updateSuss)
+				{
+					ModuleManager.Instance.AddLinkCount();
+				}
+			}
 		}
+		
+		//確認更新是否結束
+		ModuleManager.Instance.CheckIsLinkCheckOver();
 	}
 
 }

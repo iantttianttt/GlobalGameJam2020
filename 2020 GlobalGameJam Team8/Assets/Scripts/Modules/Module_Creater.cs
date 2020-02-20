@@ -23,7 +23,6 @@ public class Module_Creater : ModuleBase
 			aCreateTimer = 0.0f;
 			aCurrentTargetTime = Random.Range(ModuleCreateTimer.x, ModuleCreateTimer.y);
 		}
-
 	}
 
 	private void SpawnNewModule()

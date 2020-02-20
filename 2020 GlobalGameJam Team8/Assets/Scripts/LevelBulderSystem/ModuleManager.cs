@@ -9,7 +9,6 @@ public class ModuleManager : Singleton<ModuleManager>
     //Public Parameter
     //-----------------------------------------------------------------------
 
-
     //-----------------------------------------------------------------------
     // Get
     //-----------------------------------------------------------------------
@@ -17,6 +16,9 @@ public class ModuleManager : Singleton<ModuleManager>
     public LevelData  GetCurrentLevelData                  { get { return mCurrentLevelData;   } } 
     public Dictionary<Vector2, Vector3> ModulePositionData { get { return mModulePositionData; } }
     public Dictionary<Vector2, ModuleBase> SetUpModuleList { get { return mSetUpModuleList;    } }
+    public void       AddLinkCount()                       { mCurrentLinkCount++;                }
+    public List<ModuleBase>                UpdatingModule  { get { return mUpdatingModule;     } }
+
 
 
     // TODO 關卡背景生成修正
@@ -230,6 +232,10 @@ public class ModuleManager : Singleton<ModuleManager>
                     {
                         mSetUpModuleList.Add(iModuleData.SetUpIndex, newModule);
                     }
+                    if(newModule.ModuleType == EModuleType.TUBE_START) //儲存起始水管
+                    {
+                        mModuleTube_Start = (ModuleTube_Start)newModule;
+                    }
                     return newModule;
                 }
             }
@@ -257,6 +263,35 @@ public class ModuleManager : Singleton<ModuleManager>
     }
 
     /// <summary>
+    /// 確認有效連接水管數
+    /// </summary>
+    public void StartCheckLinkedCount()
+    {
+        if (!mIsSetUpFinish)      { return; }
+        mLastFrameLinkCount = mCurrentLinkCount;
+        mCurrentLinkCount   = 0;
+        RequestModuleUpdate(mModuleTube_Start);
+    }
+
+    /// <summary>
+    /// 確認資料檢查完畢
+    /// </summary>
+    public bool CheckIsLinkCheckOver()
+    {
+        if (!mIsSetUpFinish)      { return false; }
+        if (mUpdatingModule.Count == 0)
+        {
+            if(mCurrentLinkCount > mLastFrameLinkCount)
+            {
+                GameManager.Instance.ResetPressureTimer();
+            }
+            Debug.Log("Cur: " + mCurrentLinkCount + "   Last: " + mLastFrameLinkCount);
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
     /// 嘗試更新模組
     /// </summary>
     public bool RequestModuleUpdate(ModuleBase iTargetModule)
@@ -276,9 +311,17 @@ public class ModuleManager : Singleton<ModuleManager>
         {
             mUpdatedModule.Add(iTargetModule);
             iTargetModule.UpdateModule();
+            if(mUpdatingModule.Contains(iTargetModule))
+            {
+                mUpdatingModule.Remove(iTargetModule);
+            }
             return true;
         }
-        Debug.LogError("Module has been updated this frame.");
+        //Module has been updated this frame.
+        if(mUpdatingModule.Contains(iTargetModule))
+        {
+            mUpdatingModule.Remove(iTargetModule);
+        }
         return false;
     }
 
@@ -289,17 +332,14 @@ public class ModuleManager : Singleton<ModuleManager>
     {
         if (!mIsSetUpFinish) { return; }
 
-        for (int i = 0; i < mAllModule.Count; i++)
+        for (int i = mAllModule.Count - 1; i >= 0; i--)
         {
             if (mAllModule[i].AutoUpdateModule)
             {
                 bool hasUpdated = false;
-                for (int j = 0; j < mUpdatedModule.Count; j++)
+                if(mUpdatedModule.Contains(mAllModule[i]))
                 {
-                    if (mAllModule[i] == mUpdatedModule[j])
-                    {
-                        hasUpdated = true;
-                    }
+                    hasUpdated = true;
                 }
                 if (!hasUpdated)
                 {
@@ -396,6 +436,11 @@ public class ModuleManager : Singleton<ModuleManager>
     private List<ModuleBase>                mAllModule              = new List<ModuleBase>();
     private List<ModuleBase>                mUpdatedModule          = new List<ModuleBase>();
     private ModuleReferenceObject           mModuleReferenceObject;
+
+    private ModuleTube_Start                mModuleTube_Start;
+    private int                             mCurrentLinkCount;
+    private int                             mLastFrameLinkCount;
+    private List<ModuleBase>                mUpdatingModule          = new List<ModuleBase>();
 
 
     //-----------------------------------------------------------------------

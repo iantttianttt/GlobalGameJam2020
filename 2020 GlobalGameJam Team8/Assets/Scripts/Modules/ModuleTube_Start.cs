@@ -8,28 +8,45 @@ public class ModuleTube_Start: ModuleBase
 	{
 		base.InitModule(iModuleData);
 		mAutoUpdate = false;
-		GameManager.Instance.ModuleTube_Start = this;
 	}
 
 	public override void UpdateModule()
 	{
 		base.UpdateModule();
+		List<ModuleBase> nextModule = new List<ModuleBase>();
 
+		//取得周邊模組清單
 		switch (mModuleDirection)
 		{
 			case EModuleDirection.UP:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetUpModule(mModuleIndex));
+				nextModule.Add(ModuleManager.Instance.GetUpModule(mModuleIndex));
 				break;
 			case EModuleDirection.DOWN:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetDownModule(mModuleIndex));
+				nextModule.Add(ModuleManager.Instance.GetDownModule(mModuleIndex));
 				break;
 			case EModuleDirection.LEFT:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetLeftModule(mModuleIndex)); 
+				nextModule.Add(ModuleManager.Instance.GetLeftModule(mModuleIndex));
 				break;
 			case EModuleDirection.RIGHT:
-				ModuleManager.Instance.RequestModuleUpdate(ModuleManager.Instance.GetRightModule(mModuleIndex));
+				nextModule.Add(ModuleManager.Instance.GetRightModule(mModuleIndex));
 				break;
 		}
-	}
 
+		//更新周邊模組
+		foreach(ModuleBase hasValue in nextModule)
+		{
+			if(hasValue != null)
+			{
+				ModuleManager.Instance.UpdatingModule.Add(hasValue);
+				bool updateSuss = ModuleManager.Instance.RequestModuleUpdate(hasValue);
+				if(updateSuss)
+				{
+					ModuleManager.Instance.AddLinkCount();
+				}
+			}
+		}
+
+		//確認更新是否結束
+		ModuleManager.Instance.CheckIsLinkCheckOver();
+	}
 }

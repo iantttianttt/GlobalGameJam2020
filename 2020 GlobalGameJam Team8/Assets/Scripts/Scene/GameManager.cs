@@ -20,7 +20,6 @@ public class GameManager : Singleton<GameManager>
     public GameObject playerPrefab;
     public MainUI mainUI;
     public PauseUI pauseUI;
-    public ModuleTube_Start  ModuleTube_Start;
     public LevelDataObject[] LevelDatas;
 
     public GameState GetGameState { get { return aGameState; } }
@@ -68,7 +67,7 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.FirstSteamTime:
                 ModuleManager.Instance.CleanModuleUpdateList();
-                ModuleManager.Instance.RequestModuleUpdate(ModuleTube_Start);
+                ModuleManager.Instance.StartCheckLinkedCount();
                 ModuleManager.Instance.ModuleAutoUpdate();
                 aPressureTimer += Time.deltaTime;
                 mainUI.SetBar(aPressureTimer, aSteamStartTimer);
@@ -79,7 +78,7 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.CoreGameTime:
                 ModuleManager.Instance.CleanModuleUpdateList();
-                ModuleManager.Instance.RequestModuleUpdate(ModuleTube_Start);
+                ModuleManager.Instance.StartCheckLinkedCount();
                 ModuleManager.Instance.ModuleAutoUpdate();
                 aPressureTimer += Time.deltaTime;
                 mainUI.SetBar(aPressureTimer, aSteamBreakTimer);

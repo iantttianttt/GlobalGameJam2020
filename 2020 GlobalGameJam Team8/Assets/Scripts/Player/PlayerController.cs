@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviour
             holdModule.gameObject.GetComponent<Collider>().isTrigger = false;
             holdModule.gameObject.GetComponent<Rigidbody>().useGravity = false;
             holdModule.gameObject.GetComponent<ModuleBase>().SetUpModule(targetIndex);
-            GameManager.Instance.ResetPressureTimer();
+            //GameManager.Instance.ResetPressureTimer();  //GGJ臨時用
             return true;
         }
         else if (moduleBase != null && holdModule.gameObject.GetComponent<ModuleBase>().ModuleType == EModuleType.HAMMER)
