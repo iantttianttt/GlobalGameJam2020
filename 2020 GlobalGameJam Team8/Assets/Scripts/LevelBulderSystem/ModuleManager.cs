@@ -16,8 +16,9 @@ public class ModuleManager : Singleton<ModuleManager>
     public LevelData  GetCurrentLevelData                  { get { return mCurrentLevelData;   } } 
     public Dictionary<Vector2, Vector3> ModulePositionData { get { return mModulePositionData; } }
     public Dictionary<Vector2, ModuleBase> SetUpModuleList { get { return mSetUpModuleList;    } }
-    public void       AddLinkCount()                       { mCurrentLinkCount++;                }
-    public List<ModuleBase>                UpdatingModule  { get { return mUpdatingModule;     } }
+    public List<ModuleBase>    UpdatingModule              { get { return mUpdatingModule;     } }
+    public List<EModuleType>   GetHammerBreakableList()    { return mHammerBreakableList;        }
+    public void                AddLinkCount()              { mCurrentLinkCount++;                }
 
 
 
@@ -40,6 +41,7 @@ public class ModuleManager : Singleton<ModuleManager>
     {
         mIsSetUpFinish         = false;
         mModuleReferenceObject = Resources.Load<ModuleReferenceObject>(MODULE_REFERENCE_OBJECT_PATH);
+        mHammerBreakableList   = Resources.Load<HammerBreakableList>(HAMMER_BREAKABLE_LIST_PATH).BreakableList;
         ModulePositionData.Clear();
         SetUpModuleList.Clear();
     }
@@ -436,6 +438,7 @@ public class ModuleManager : Singleton<ModuleManager>
     private List<ModuleBase>                mAllModule              = new List<ModuleBase>();
     private List<ModuleBase>                mUpdatedModule          = new List<ModuleBase>();
     private ModuleReferenceObject           mModuleReferenceObject;
+    private List<EModuleType>               mHammerBreakableList;
 
     private ModuleTube_Start                mModuleTube_Start;
     private int                             mCurrentLinkCount;
@@ -449,5 +452,5 @@ public class ModuleManager : Singleton<ModuleManager>
     private const float  MODULE_SIZE = 1.0f;
     private const float  MODULE_HIGH = 0.0f;
     private const string MODULE_REFERENCE_OBJECT_PATH = "System/ModuleReferenceData";
-
+    private const string HAMMER_BREAKABLE_LIST_PATH   = "System/HammerBreakableList";
 }

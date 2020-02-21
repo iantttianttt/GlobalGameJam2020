@@ -203,9 +203,12 @@ public class PlayerController : MonoBehaviour
         }
         else if (moduleBase != null && holdModule.gameObject.GetComponent<ModuleBase>().ModuleType == EModuleType.HAMMER)
         {
-            ModuleManager.Instance.RequestDestoryModule(moduleBase);
-            ModuleManager.Instance.RequestDestoryModule(holdModule.gameObject.GetComponent<ModuleBase>());
-            return true;
+            if(ModuleManager.Instance.GetHammerBreakableList().Contains(moduleBase.ModuleType))
+            {
+                ModuleManager.Instance.RequestDestoryModule(moduleBase);
+                ModuleManager.Instance.RequestDestoryModule(holdModule.gameObject.GetComponent<ModuleBase>());
+                return true;
+            }
         }
         return false;
     }
