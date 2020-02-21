@@ -1,13 +1,4 @@
-﻿public enum PlayerState
-{
-    None,
-    Idle,
-    HoldingModule,
-    PutingModule,
-    ThrowingModule
-}
-
-public enum ColorType
+﻿public enum ColorType
 {
     Red = 0,
     Blue = 1,
