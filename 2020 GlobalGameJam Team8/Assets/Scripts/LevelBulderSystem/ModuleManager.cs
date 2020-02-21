@@ -285,7 +285,7 @@ public class ModuleManager : Singleton<ModuleManager>
             {
                 GameManager.Instance.ResetPressureTimer();
             }
-            Debug.Log("Cur: " + mCurrentLinkCount + "   Last: " + mLastFrameLinkCount);
+            //Debug.Log("Cur: " + mCurrentLinkCount + "   Last: " + mLastFrameLinkCount);
             return true;
         }
         return false;

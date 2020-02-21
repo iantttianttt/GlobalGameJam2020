@@ -52,7 +52,6 @@ public class KeyboardController : IController
                 AnalogY = -1;
             else AnalogY = 0;
         }
-
         return new Vector2(Mathf.Cos(Mathf.Atan2(AnalogY, AnalogX)), Mathf.Sin(Mathf.Atan2(AnalogY, AnalogX)))*(Mathf.Abs(AnalogX)+ Mathf.Abs(AnalogY) > 0 ? 1: 0);
     }
 
