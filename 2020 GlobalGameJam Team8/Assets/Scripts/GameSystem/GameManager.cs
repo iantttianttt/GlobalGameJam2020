@@ -17,33 +17,44 @@ public enum GameState
 
 public class GameManager : Singleton<GameManager>
 {
+    //-----------------------------------------------------------------------
+    //Public Parameter
+    //-----------------------------------------------------------------------
     public GameObject playerPrefab;
     public MainUI mainUI;
     public PauseUI pauseUI;
     public LevelDataObject[] LevelDatas;
 
-    public GameState GetGameState { get { return aGameState; } }
+    public GameState GetGameState { get { return mGameState; } }
 
+    //-----------------------------------------------------------------------
+    // Public Function
+    //-----------------------------------------------------------------------
     /// <summary>
     /// 設置玩家生成位置
     /// </summary>
-    /// <param name="_sqawnPos"></param>
-    public void AddPlayerSqawnPos(Vector2 _sqawnPos)
+    /// <param name="_spawnPos"></param>
+    public void AddPlayerSqawnPos(Vector2 _spawnPos)
     {
-        playerSqawnPos.Add(_sqawnPos);
+        mPlayerSpawnPos.Add(_spawnPos);
     }
 
+    /// <summary>
+    /// 重設壓力進度
+    /// </summary>
     public void ResetPressureTimer()
     {
-        aPressureTimer = 0.0f;
-        if (aGameState == GameState.FirstSteamTime)
+        mPressureTimer = 0.0f;
+        if (mGameState == GameState.FirstSteamTime)
         {
-            aGameState = GameState.CoreGameTime;
+            mGameState = GameState.CoreGameTime;
         }
     }
 
-
-    void Start()
+    //-----------------------------------------------------------------------
+    // Private Function
+    //-----------------------------------------------------------------------
+    private void Start()
     {
         mainUI = FindObjectOfType<MainUI>();
         InitNewGame();
@@ -52,26 +63,25 @@ public class GameManager : Singleton<GameManager>
     private void Update()
     {
         //       mainUI.SetBar(pressure);
-
-        switch (aGameState)
+        switch (mGameState)
         {
             case GameState.Preparing:
                 break;
             case GameState.ReadyTimer:
-                aStartCountDownTimer -= Time.deltaTime;
-                if (aStartCountDownTimer <= 0.0f)
+                mStartCountDownTimer -= Time.deltaTime;
+                if (mStartCountDownTimer <= 0.0f)
                 {
-                    aGameState = GameState.FirstSteamTime;
-                    aPressureTimer = 0.0f;
+                    mGameState = GameState.FirstSteamTime;
+                    mPressureTimer = 0.0f;
                 }
                 break;
             case GameState.FirstSteamTime:
                 ModuleManager.Instance.CleanModuleUpdateList();
                 ModuleManager.Instance.StartCheckLinkedCount();
                 ModuleManager.Instance.ModuleAutoUpdate();
-                aPressureTimer += Time.deltaTime;
-                mainUI.SetBar(aPressureTimer, aSteamStartTimer);
-                if (aPressureTimer > aSteamStartTimer)
+                mPressureTimer += Time.deltaTime;
+                mainUI.SetBar(mPressureTimer, mSteamStartTimer);
+                if (mPressureTimer > mSteamStartTimer)
                 {
                     GameOver();
                 }
@@ -80,9 +90,9 @@ public class GameManager : Singleton<GameManager>
                 ModuleManager.Instance.CleanModuleUpdateList();
                 ModuleManager.Instance.StartCheckLinkedCount();
                 ModuleManager.Instance.ModuleAutoUpdate();
-                aPressureTimer += Time.deltaTime;
-                mainUI.SetBar(aPressureTimer, aSteamBreakTimer);
-                if (aPressureTimer > aSteamBreakTimer)
+                mPressureTimer += Time.deltaTime;
+                mainUI.SetBar(mPressureTimer, mSteamBreakTimer);
+                if (mPressureTimer > mSteamBreakTimer)
                 {
                     GameOver();
                 }
@@ -90,29 +100,35 @@ public class GameManager : Singleton<GameManager>
             case GameState.GameOver:
                 break;
         }
-
         EveryFrameUpdate();
-
     }
 
-
+    /// <summary>
+    /// 初始化新遊戲
+    /// </summary>
     private void InitNewGame()
     {
-        aGameState = GameState.Preparing;
+        mGameState = GameState.Preparing;
         InitLevel();
         SpawnPlayer();
         GameStart();
     }
 
+    /// <summary>
+    /// 初始化關卡
+    /// </summary>
     private void InitLevel()
     {
         ModuleManager.Instance.InitModuleManager();
         ModuleManager.Instance.BuildLevel(LevelDatas[0].LevelData);
         LevelData levelData = ModuleManager.Instance.GetCurrentLevelData;
-        aSteamStartTimer    = levelData.SteamStartTimer;
-        aSteamBreakTimer    = levelData.SteamBreakTimer;
+        mSteamStartTimer    = levelData.SteamStartTimer;
+        mSteamBreakTimer    = levelData.SteamBreakTimer;
     }
 
+    /// <summary>
+    /// 生成玩家
+    /// </summary>
     private void SpawnPlayer()
     {
         if (PlayerManager.Instance.players.Count <= 0)
@@ -123,19 +139,25 @@ public class GameManager : Singleton<GameManager>
 
         for (int i = 0; i < PlayerManager.Instance.players.Count; i++)
         {
-            Instantiate(playerPrefab, new Vector3(playerSqawnPos[i].x, -0.3f, playerSqawnPos[i].y), playerPrefab.transform.rotation);
+            Instantiate(playerPrefab, new Vector3(mPlayerSpawnPos[i].x, PLAYER_SPAWN_HIGH_ADJUST, mPlayerSpawnPos[i].y), playerPrefab.transform.rotation);
         }
     }
 
+    /// <summary>
+    /// 開始遊戲
+    /// </summary>
     private void GameStart()
     {
-        aGameState = GameState.ReadyTimer;
-        aStartCountDownTimer = START_COUNT_DOWN_TIME;
+        mGameState = GameState.ReadyTimer;
+        mStartCountDownTimer = START_COUNT_DOWN_TIME;
     }
 
+    /// <summary>
+    /// 遊戲結束
+    /// </summary>
     private void GameOver()
     {
-        aGameState = GameState.GameOver;
+        mGameState = GameState.GameOver;
         mainUI.Lose();
     }
 
@@ -154,19 +176,19 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private GameState aGameState;
-    private float aSteamStartTimer;
-    private float aSteamBreakTimer;
-    private float aPressureTimer;
-    private float aStartCountDownTimer;
-
-    private List<Vector2> playerSqawnPos = new List<Vector2>();
-
-
-
+    //-----------------------------------------------------------------------
+    // Private Parameter
+    //-----------------------------------------------------------------------
+    private GameState     mGameState;
+    private float         mSteamStartTimer;
+    private float         mSteamBreakTimer;
+    private float         mPressureTimer;
+    private float         mStartCountDownTimer;
+    private List<Vector2> mPlayerSpawnPos = new List<Vector2>();
 
     //-----------------------------------------------------------------------
     // Const
     //-----------------------------------------------------------------------
-    private const float START_COUNT_DOWN_TIME = 5.0f;
+    private const float START_COUNT_DOWN_TIME    = 5.0f;
+    private const float PLAYER_SPAWN_HIGH_ADJUST = -0.3f;
 }

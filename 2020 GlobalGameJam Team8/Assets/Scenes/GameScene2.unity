@@ -1924,14 +1924,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2065937435}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d8c527da2760554db57a83df3488fac, type: 3}
+  m_Script: {fileID: 11500000, guid: 142ed86883e5076499b7805bf0e65aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 6289699933081793687, guid: 670593bb4dc10bb488ea2c775bfb38b8,
     type: 3}
   mainUI: {fileID: 1570216006}
   pauseUI: {fileID: 613979240}
-  ModuleTube_Start: {fileID: 0}
   LevelDatas:
   - {fileID: 11400000, guid: 324c2d0ad79129841b416d369a087079, type: 2}
 --- !u!4 &2065937437
