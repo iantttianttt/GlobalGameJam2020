@@ -151,8 +151,6 @@ MonoBehaviour:
   LeftWall: {fileID: 8688745944988227011}
   RightWall: {fileID: 7757554467825675809}
   DownWall: {fileID: 7693602299748915797}
-  ModuleReferenceObject: {fileID: 11400000, guid: 28245817857754043821f137b21a79ec,
-    type: 2}
   Updateing: 0
 --- !u!1 &1012551476845910705
 GameObject:
@@ -258,8 +256,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.2603898, z: 1.0000001}
-  m_Center: {x: 0.00000044703484, y: 1.0798726, z: 0.000000059604645}
+  m_Size: {x: 1, y: 5, z: 1.0000001}
+  m_Center: {x: 0.00000044703484, y: 2, z: 0.000000059604645}
 --- !u!65 &4608905643991215247
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -563,8 +561,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.2603898, z: 1.0000001}
-  m_Center: {x: 0.00000044703484, y: 1.0798726, z: 0.000000059604645}
+  m_Size: {x: 1, y: 5, z: 1.0000001}
+  m_Center: {x: 0.00000044703484, y: 2, z: 0.000000059604645}
 --- !u!65 &4444580241155775340
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -576,8 +574,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.2603898, z: 1.0000001}
-  m_Center: {x: 0.00000044703484, y: 1.0798726, z: 0.000000059604645}
+  m_Size: {x: 1, y: 5, z: 1.0000001}
+  m_Center: {x: 0.00000044703484, y: 2, z: 0.000000059604645}
 --- !u!65 &2193858439346685390
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -589,8 +587,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.2603898, z: 1.0000001}
-  m_Center: {x: 0.00000044703484, y: 1.0798726, z: 0.000000059604645}
+  m_Size: {x: 1, y: 5, z: 1.0000001}
+  m_Center: {x: 0.00000044703484, y: 2, z: 0.000000059604645}
 --- !u!1001 &843665650859429066
 PrefabInstance:
   m_ObjectHideFlags: 0

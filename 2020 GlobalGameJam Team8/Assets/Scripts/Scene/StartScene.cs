@@ -18,7 +18,8 @@ public class StartScene : MonoBehaviour
         if (XCI.GetButtonDown(XboxButton.Start, XboxController.First)||
             XCI.GetButtonDown(XboxButton.Start, XboxController.Second)||
             XCI.GetButtonDown(XboxButton.Start, XboxController.Fourth)||
-            XCI.GetButtonDown(XboxButton.Start, XboxController.Third))
+            XCI.GetButtonDown(XboxButton.Start, XboxController.Third) ||
+            Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.Keypad1))
             SceneManager.LoadScene("PlayerMenu");
     }
 }
