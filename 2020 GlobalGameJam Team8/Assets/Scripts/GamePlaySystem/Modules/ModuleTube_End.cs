@@ -32,7 +32,9 @@ public class ModuleTube_End : ModuleBase
 	public override void UpdateModule()
 	{
 		base.UpdateModule();
-		GameController.Instance.mainUI.Win();
+		Debug.Log("Win");
+		GameManager.Instance.ChangeGameState(new State_PlayerSelect(GameManager.Instance));
+//		GameController.Instance.mainUI.Win();
 	}
 
 }

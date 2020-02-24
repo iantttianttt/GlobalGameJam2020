@@ -113,6 +113,16 @@ public class GameController : Singleton<GameController>
         }
     }
 
+    /// <summary>
+    /// 清除關卡
+    /// </summary>
+    public void ClearGamePlayLevel()
+    {
+        Destroy(ModuleManager.Instance.gameObject);
+        Destroy(LevelBuilder.Instance.gameObject);
+        Destroy(this.gameObject);
+    }
+
     //-----------------------------------------------------------------------
     // Private Function
     //-----------------------------------------------------------------------
@@ -177,7 +187,9 @@ public class GameController : Singleton<GameController>
     private void GameOver()
     {
         mGameState = GamePlayState.GameOver;
-        mainUI.Lose();
+        Debug.Log("GameOver");
+        GameManager.Instance.ChangeGameState(new State_PlayerSelect(GameManager.Instance));
+//        mainUI.Lose();
     }
 
     /// <summary>

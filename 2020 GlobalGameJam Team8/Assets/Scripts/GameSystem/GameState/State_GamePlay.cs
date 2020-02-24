@@ -30,6 +30,7 @@ public class State_GamePlay : IGameState
 	// 結束
 	public override void StateExit()
 	{
+		GameController.Instance.ClearGamePlayLevel();
 
 	}
 			
