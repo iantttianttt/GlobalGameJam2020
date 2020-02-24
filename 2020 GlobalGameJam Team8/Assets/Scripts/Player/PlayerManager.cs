@@ -58,7 +58,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         ColorType _color;
 
-        if(players.Find((x) => x.color == ColorType.Red)==null)
+        if (players.Find((x) => x.color == ColorType.Red)==null)
             _color = ColorType.Red;
         else if(players.Find((x) => x.color == ColorType.Yellow) == null)
             _color = ColorType.Yellow;        

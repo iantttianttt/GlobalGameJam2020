@@ -14,20 +14,20 @@ public class Player : MonoBehaviour
     private IPlayerState StateHandle;
 
     /// 被抓住的物件
-    internal GameObject holdModule;
+    public GameObject holdModule;
 
     /// 玩家鋼體
     private Rigidbody rb;
 
-    /// 移動速度
-    private float speed = 5;
-
-    /// 拋物件時的力道
-    internal float throwPower = 800;
-
     //-----------------------------------------------------------------------
     // Public Parameter
     //-----------------------------------------------------------------------
+
+    /// 移動速度
+    public float speed = 5;
+
+    /// 拋物件時的力道
+    public float throwPower = 800;
 
     /// <summary>
     /// 控制器
@@ -40,13 +40,15 @@ public class Player : MonoBehaviour
     public GameObject holdPoint;
 
     /// 手長度(可取得物件以及放置物件的距離)
-    internal float handLength = 0.8f;
+    public float handLength = 0.8f;
 
     public PutDisplay putDisplay;
     public GameObject RedBody;
     public GameObject YellowBody;
     public GameObject GreenBody;
     public GameObject BlueBody;
+
+    public BuffAgent buffAgent;
 
     //-----------------------------------------------------------------------
     // Private Function
@@ -95,13 +97,21 @@ public class Player : MonoBehaviour
     {
         Init();
         StateHandle = new IdleState(this);
+        buffAgent = new BuffAgent(this);
+
     }
 
     private void Update()
     {
+
         ///移動能力
         Movement();
-        StateHandle.EveryFrame();
+
+        ///Buff作用更新
+        buffAgent.BuffUpdate();
+
+        ///狀態處理更新
+        StateHandle.UpdateFrame();
     }
 
     /// <summary>
@@ -113,15 +123,31 @@ public class Player : MonoBehaviour
         float vertical = controller.Vertical();
         rb.velocity = new Vector3(horizontal, 0, vertical) * speed;
 
+
         if (Mathf.Abs(horizontal) + Mathf.Abs(vertical) > 0.3f)
+        {
             transform.eulerAngles = new Vector3(0, Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg, 0);
+        }
+
     }
 
+    /// <summary>
+    /// 狀態改變
+    /// </summary>
+    /// <param name="nextState">下一個狀態</param>
     public void ChangeState(IPlayerState nextState)
     {
         StateHandle.Exit();
         StateHandle = nextState;
         StateHandle.Enter();
+    }
+
+    /// <summary>
+    /// 設定玩家暈眩
+    /// </summary>
+    public void SetDizziness()
+    {
+        buffAgent.AddBuff(new Dizziness());
     }
 }
 

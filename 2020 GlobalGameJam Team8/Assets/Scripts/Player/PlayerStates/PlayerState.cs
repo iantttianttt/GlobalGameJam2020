@@ -4,13 +4,13 @@ using UnityEngine;
 
 public abstract class IPlayerState
 {
-    public Player player;
+    protected Player player;
 
-    public IPlayerState(Player _player){   player = _player;  }
+    protected IPlayerState(Player _player){   player = _player;  }
 
     public virtual void Enter(){}
-
-    public virtual void EveryFrame(){}
+    
+    public virtual void UpdateFrame(){}
 
     public virtual void Exit(){}
 }
@@ -19,7 +19,7 @@ public class IdleState : IPlayerState
 {
     public IdleState(Player _player) : base(_player) { }
 
-    public override void EveryFrame()
+    public override void UpdateFrame()
     {
         /// 檢查是否可以撿取物件
         Ray ray = new Ray();
@@ -47,7 +47,7 @@ public class HoldingModule : IPlayerState
 {
     public HoldingModule(Player _player) : base(_player) { }
 
-    public override void EveryFrame()
+    public override void UpdateFrame()
     {
         player.holdModule.gameObject.transform.position = player.holdPoint.transform.position;
 
