@@ -45,7 +45,7 @@ public class PlayerMenuManager : MonoBehaviour
         SetImage();
 
         CheckGameStart();
-        
+
 
     }
 
@@ -154,4 +154,5 @@ public class PlayerMenuManager : MonoBehaviour
     {
         SceneManager.LoadScene("GameScene"+LevalID);
     }
+
 }

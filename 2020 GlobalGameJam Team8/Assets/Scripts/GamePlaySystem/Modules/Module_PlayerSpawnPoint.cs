@@ -8,7 +8,7 @@ public class Module_PlayerSpawnPoint : ModuleBase
 	{
 		base.InitModule(iModuleData);
 
-		GameManager.Instance.AddPlayerSqawnPos(new Vector2(this.gameObject.transform.position.x, this.gameObject.transform.position.z));
+		GameController.Instance.AddPlayerSqawnPos(new Vector2(this.gameObject.transform.position.x, this.gameObject.transform.position.z));
 	}
 
 }

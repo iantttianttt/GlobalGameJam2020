@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level_GGJ
   m_EditorClassIdentifier: 
   LevelData:
-    LevelName: 
+    LevelName: GGJ
     LevelLayout: {x: 13, y: 9}
     SteamStartTimer: 25
     SteamBreakTimer: 15

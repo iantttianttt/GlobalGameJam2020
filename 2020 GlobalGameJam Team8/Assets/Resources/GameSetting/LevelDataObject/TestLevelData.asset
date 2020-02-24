@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestLevelData
   m_EditorClassIdentifier: 
   LevelData:
-    LevelName: 
+    LevelName: 001
     LevelLayout: {x: 8, y: 6}
     SteamStartTimer: 20
     SteamBreakTimer: 20

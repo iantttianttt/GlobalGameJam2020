@@ -32,7 +32,7 @@ public class ModuleTube_End : ModuleBase
 	public override void UpdateModule()
 	{
 		base.UpdateModule();
-		GameManager.Instance.mainUI.Win();
+		GameController.Instance.mainUI.Win();
 	}
 
 }

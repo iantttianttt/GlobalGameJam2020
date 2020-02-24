@@ -20,15 +20,6 @@ public class ModuleManager : Singleton<ModuleManager>
     public List<EModuleType>   GetHammerBreakableList()    { return mHammerBreakableList;        }
     public void                AddLinkCount()              { mCurrentLinkCount++;                }
 
-
-
-    // TODO 關卡背景生成修正
-    public GameObject Floor;
-    public GameObject UpWall;
-    public GameObject LeftWall;
-    public GameObject RightWall;
-    public GameObject DownWall;
-
     //-----------------------------------------------------------------------
     // Public Function
     //-----------------------------------------------------------------------
@@ -45,29 +36,12 @@ public class ModuleManager : Singleton<ModuleManager>
     }
 
     /// <summary>
-    /// 設定場景
+    /// 設置初始模組
     /// </summary>
-    public void BuildLevel(LevelData iLevelData)
+    public void SetupDefaultModule(LevelData iLevelData)
     {
         mCurrentLevelData = iLevelData;
         CalculateModulePositionData(mCurrentLevelData);
-
-        // TODO 關卡背景生成修正
-        Floor.transform.localScale = new Vector3(mCurrentLevelData.LevelLayout.x + 2, 1.0f, mCurrentLevelData.LevelLayout.y + 2);
-        Vector3 upRight;
-        Vector3 downLeft;
-        mModulePositionData.TryGetValue(new Vector2(mCurrentLevelData.LevelLayout.x, mCurrentLevelData.LevelLayout.y), out upRight);
-        mModulePositionData.TryGetValue(new Vector2(1, 1), out downLeft);
-        UpWall.transform.position    = new Vector3(UpWall.transform.position.x, UpWall.transform.position.y, upRight.z + 1);
-        RightWall.transform.position = new Vector3(upRight.x + 1, RightWall.transform.position.y, RightWall.transform.position.z);
-        DownWall.transform.position  = new Vector3(DownWall.transform.position.x, DownWall.transform.position.y, downLeft.z - 1);
-        LeftWall.transform.position  = new Vector3(downLeft.x - 1, LeftWall.transform.position.y, LeftWall.transform.position.z);
-
-        UpWall.transform.localScale    = new Vector3(mCurrentLevelData.LevelLayout.x + 2, 1.0f, 1);
-        RightWall.transform.localScale = new Vector3(1, 1.0f, mCurrentLevelData.LevelLayout.y + 2);
-        LeftWall.transform.localScale  = new Vector3(1, 1.0f, mCurrentLevelData.LevelLayout.y + 2);
-        DownWall.transform.localScale  = new Vector3(mCurrentLevelData.LevelLayout.x + 2, 1.0f, 1);
-        // TODO 關卡背景生成修正
 
         //Setup DefaultModule
         foreach (var OneItem in mCurrentLevelData.DefaultModule)
@@ -283,7 +257,7 @@ public class ModuleManager : Singleton<ModuleManager>
         {
             if(mCurrentLinkCount > mLastFrameLinkCount)
             {
-                GameManager.Instance.ResetPressureTimer();
+                GameController.Instance.ResetPressureTimer();
             }
             //Debug.Log("Cur: " + mCurrentLinkCount + "   Last: " + mLastFrameLinkCount);
             return true;
