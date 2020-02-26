@@ -31,6 +31,8 @@ public class ModuleManager : Singleton<ModuleManager>
         mIsSetUpFinish         = false;
         mModuleReferenceObject = Resources.Load<ModuleReferenceObject>(MODULE_REFERENCE_OBJECT_PATH);
         mHammerBreakableList   = Resources.Load<HammerBreakableList>(HAMMER_BREAKABLE_LIST_PATH).BreakableList;
+        mModuleRoot            = new GameObject();
+        mModuleRoot.name       = MODULE_ROOT_NAME;
         ModulePositionData.Clear();
         SetUpModuleList.Clear();
     }
@@ -187,7 +189,7 @@ public class ModuleManager : Singleton<ModuleManager>
                 {
                     SpawnPos = iCreater.transform.position;
                     // TODO Object Pool
-                    GameObject newObj = Instantiate(reference.ObjectReference, SpawnPos, Quaternion.identity);
+                    GameObject newObj = ObjectPool.Instance.Spawn(reference.ObjectReference, SpawnPos, Quaternion.identity, mModuleRoot.transform);
                     ModuleBase newModule = newObj.GetComponent<ModuleBase>();
                     newModule.InitModule(iModuleData);
                     mAllModule.Add(newModule);
@@ -197,7 +199,7 @@ public class ModuleManager : Singleton<ModuleManager>
                 if(mModulePositionData.TryGetValue(iModuleData.SetUpIndex, out SpawnPos))
                 {
                     // TODO Object Pool
-                    GameObject newObj    = Instantiate(reference.ObjectReference, SpawnPos, Quaternion.identity);
+                    GameObject newObj    = ObjectPool.Instance.Spawn(reference.ObjectReference, SpawnPos, Quaternion.identity, mModuleRoot.transform);
                     ModuleBase newModule = newObj.GetComponent<ModuleBase>();
                     newModule.InitModule(iModuleData);
                     mAllModule.Add(newModule);
@@ -222,10 +224,9 @@ public class ModuleManager : Singleton<ModuleManager>
     /// </summary>
     public void RequestDestoryModule(ModuleBase iModuleBase)
     {
-        // TODO Object Pool
         mAllModule.Remove(iModuleBase);
         mSetUpModuleList.Remove(iModuleBase.ModuleIndex);
-        Destroy(iModuleBase.gameObject);
+        ObjectPool.Instance.Despawn(iModuleBase.gameObject);
     }
 
     /// <summary>
@@ -310,20 +311,26 @@ public class ModuleManager : Singleton<ModuleManager>
         {
             if (mAllModule[i].AutoUpdateModule)
             {
-                bool hasUpdated = false;
-                if(mUpdatedModule.Contains(mAllModule[i]))
-                {
-                    hasUpdated = true;
-                }
-                if (!hasUpdated)
-                {
-                    mAllModule[i].UpdateModule();
-                    mUpdatedModule.Add(mAllModule[i]);
-                }
+                if(mUpdatedModule.Contains(mAllModule[i])) { continue; }
+                mAllModule[i].UpdateModule();
+                mUpdatedModule.Add(mAllModule[i]);
             }
         }
+
+        foreach (ModuleBase module in mDestoryRequestModules)
+        {
+            if (module != null) { RequestDestoryModule(module); }
+        }
+        mDestoryRequestModules.Clear();
     }
 
+    /// <summary>
+    /// 儲存將刪除的模組，統一在自動更新結束後刪除，以避免自動更新中陣列錯誤
+    /// </summary>
+    public void AddDestoryRequestModule(ModuleBase _Module) 
+    { 
+        mDestoryRequestModules.Add(_Module);
+    }
 
 
     //-----------------------------------------------------------------------
@@ -416,7 +423,8 @@ public class ModuleManager : Singleton<ModuleManager>
     private int                             mCurrentLinkCount;
     private int                             mLastFrameLinkCount;
     private List<ModuleBase>                mUpdatingModule          = new List<ModuleBase>();
-
+    private GameObject                      mModuleRoot;
+    private List<ModuleBase>                mDestoryRequestModules   = new List<ModuleBase>();
 
     //-----------------------------------------------------------------------
     // Const
@@ -425,4 +433,6 @@ public class ModuleManager : Singleton<ModuleManager>
     private const float  MODULE_HIGH = 0.0f;
     private const string MODULE_REFERENCE_OBJECT_PATH = "GameSetting/Module Reference Data";
     private const string HAMMER_BREAKABLE_LIST_PATH   = "GameSetting/Hammer Breakable List";
+    private const string MODULE_ROOT_NAME             = "ModuleRoot";
+
 }

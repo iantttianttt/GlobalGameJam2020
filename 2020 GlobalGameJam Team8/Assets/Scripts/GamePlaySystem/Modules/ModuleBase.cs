@@ -81,7 +81,7 @@ public class ModuleBase : MonoBehaviour
                 }
                 else if(mToDestory)
                 {
-                    ModuleManager.Instance.RequestDestoryModule(this);
+                    ModuleManager.Instance.AddDestoryRequestModule(this);
                 }
                 else
                 {

@@ -81,7 +81,7 @@ public class GameController : Singleton<GameController>
                 ModuleManager.Instance.StartCheckLinkedCount();
                 ModuleManager.Instance.ModuleAutoUpdate();
                 mPressureTimer += Time.deltaTime;
-//                mainUI.SetBar(mPressureTimer, mSteamBreakTimer);
+                mGameMainUI.SetBar(mPressureTimer, mSteamStartTimer);
                 if (mPressureTimer > mSteamBreakTimer)
                 {
                     GameOver();
