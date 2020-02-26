@@ -9,19 +9,20 @@ public class ObjectPool : Singleton<ObjectPool>
 	/// </summary>
 	class Pool
 	{
-		public GameObject GatPoolGameObject { get { return mPoolGameObject; } }
+		public GameObject GatPoolGameObject { get { return mPoolGameObjectRoot; } }
 
-		private GameObject        mPoolGameObject;
+		private GameObject        mPoolGameObjectRoot;
 		private int               mNextId = 1;
 		private Stack<GameObject> mInactive;
 		private GameObject        mPrefab;
+		private List<GameObject>  mSpawnedObject = new List<GameObject>();
 
 		// Constructor
 		public Pool(GameObject prefab, int initialQty)
 		{
 			this.mPrefab = prefab;
-			mPoolGameObject = new GameObject("Pool_" + prefab.ToString());
-			mPoolGameObject.transform.SetParent(ObjectPool.Instance.gameObject.transform);
+			mPoolGameObjectRoot = new GameObject("Pool_" + prefab.ToString());
+			mPoolGameObjectRoot.transform.SetParent(ObjectPool.Instance.gameObject.transform);
 
 			// If Stack uses a linked list internally, then this
 			// whole initialQty thing is a placebo that we could
@@ -29,7 +30,9 @@ public class ObjectPool : Singleton<ObjectPool>
 			mInactive = new Stack<GameObject>(initialQty);
 		}
 
-		// Spawn an object from our pool
+		/// <summary>
+		/// 生成新物件
+		/// </summary>
 		public GameObject Spawn(Vector3 pos, Quaternion rot, Transform parent = null)
 		{
 			GameObject obj;
@@ -37,10 +40,6 @@ public class ObjectPool : Singleton<ObjectPool>
 			{
 				// We don't have an object in our pool, so we
 				// instantiate a whole new object.
-				/*if (parent == null)
-				{
-					parent
-				}*/
 				obj = (GameObject)GameObject.Instantiate(mPrefab, pos, rot, parent);
 				obj.name = mPrefab.name + " (" + (mNextId++) + ")";
 
@@ -75,34 +74,68 @@ public class ObjectPool : Singleton<ObjectPool>
 				SceneManager.MoveGameObjectToScene(obj, SceneManager.GetActiveScene());
 			}
 			obj.SetActive(true);
+			mSpawnedObject.Add(obj);
 			return obj;
 		}
-
-		// Return an object to the inactive pool.
+		/// <summary>
+		/// 回收特定物件
+		/// </summary>
 		public void Despawn(GameObject obj)
 		{
 			obj.SetActive(false);
 			mInactive.Push(obj);
-			obj.transform.SetParent(mPoolGameObject.transform);
+			obj.transform.SetParent(mPoolGameObjectRoot.transform);
+			mSpawnedObject.Remove(obj);
+		}
+		/// <summary>
+		/// 回收所有使用中物件
+		/// </summary>
+		public void RecoverAll()
+		{
+			for (int i = mSpawnedObject.Count - 1; i >= 0; i--)
+			{
+				Despawn(mSpawnedObject[i]);
+			}
+		}
+		/// <summary>
+		/// 刪除物件池中未使用物件
+		/// </summary>
+		public void DestoryUnused()
+		{
+			for (int i = mInactive.Count - 1; i >= 0; i--)
+			{
+				Destroy(mInactive.Pop());
+			}
+		}
+		/// <summary>
+		/// 刪除物件池處理
+		/// </summary>
+		public void OnDestoryPool()
+		{
+			for (int i = mInactive.Count - 1; i >= 0; i--)
+			{
+				Destroy(mInactive.Pop());
+			}
+			for (int i = mSpawnedObject.Count - 1; i >= 0; i--)
+			{
+				Destroy(mSpawnedObject[i]);
+			}
+			Destroy(mPoolGameObjectRoot);
 		}
 
 	}
 
 
 	/// <summary>
-	/// Added to freshly instantiated objects, so we can link back
-	/// to the correct pool on despawn.
+	/// 追加於生成物上，用來追蹤來源
 	/// </summary>
 	class PoolMember : MonoBehaviour
 	{
 		public Pool myPool;
 	}
 
-	// All of our pools
-	private Dictionary<GameObject, Pool> pools;
-
 	/// <summary>
-	/// Initialize our dictionary.
+	/// 初始化該Prefab專用Pool
 	/// </summary>
 	private void Init(GameObject prefab = null, int qty = DEFAULT_POOL_SIZE)
 	{
@@ -117,6 +150,7 @@ public class ObjectPool : Singleton<ObjectPool>
 	}
 
 	/// <summary>
+	/// 預載物件
 	/// If you want to preload a few copies of an object at the start
 	/// of a scene, you can use this. Really not needed unless you're
 	/// going to go from zero instances to 100+ very quickly.
@@ -143,6 +177,7 @@ public class ObjectPool : Singleton<ObjectPool>
 	}
 
 	/// <summary>
+	/// 生成物件   
 	/// Spawns a copy of the specified prefab (instantiating one if required).
 	/// NOTE: Remember that Awake() or Start() will only run on the very first
 	/// spawn and that member variables won't get reset.  OnEnable will run
@@ -157,7 +192,7 @@ public class ObjectPool : Singleton<ObjectPool>
 	}
 
 	/// <summary>
-	/// Despawn the specified gameobject back into its pool.
+	/// 回收物件
 	/// </summary>
 	public void Despawn(GameObject obj)
 	{
@@ -172,6 +207,63 @@ public class ObjectPool : Singleton<ObjectPool>
 			pm.myPool.Despawn(obj);
 		}
 	}
+
+	/// <summary>
+	/// 回收所有生成物件
+	/// </summary>
+	public void RecoverAllSpawnedObject()
+	{
+		if (pools == null) { return; }
+		foreach (Pool pool in pools.Values)
+		{
+			pool.RecoverAll();
+		}
+	}
+
+	/// <summary>
+	/// 刪除所有未使用物件
+	/// </summary>
+	public void DestoryAllUnusedObject()
+	{
+		if (pools == null) { return; }
+		foreach (Pool pool in pools.Values)
+		{
+			pool.DestoryUnused();
+		}
+	}
+	/// <summary>
+	/// 刪除特定物件池
+	/// </summary>
+	public void DestoryPool(GameObject _TargetPrefab)
+	{
+		if (pools == null) { return; }
+		if (pools.ContainsKey(_TargetPrefab))
+		{
+			Pool targetPool = null;
+			if (pools.TryGetValue(_TargetPrefab, out targetPool))
+			{
+				targetPool.OnDestoryPool();
+				pools.Remove(_TargetPrefab);
+			}
+		}
+	}
+	/// <summary>
+	/// 刪除所有物件池
+	/// </summary>
+	public void DestoryAllPool()
+	{
+		if (pools == null) { return; }
+		foreach (Pool pool in pools.Values)
+		{
+			pool.OnDestoryPool();
+		}
+		pools.Clear();
+	}
+
+	/// <summary>
+	/// 所有Prefab物件與其對應物件池
+	/// </summary>
+	private Dictionary<GameObject, Pool> pools;
 
 	//-----------------------------------------------------------------------
 	// Const

@@ -25,10 +25,12 @@ public class LevelBuilder : Singleton<LevelBuilder>
     /// </summary>
     public void BuildLevel(LevelData iLevelData)
     {
+        mLevelAreaObjectRoot = new GameObject(LEVEL_AREA_OBJECT_ROOT_NAME);
+
         // Spawn Floor
-        foreach(Vector3 values in ModuleManager.Instance.ModulePositionData.Values)
+        foreach (Vector3 values in ModuleManager.Instance.ModulePositionData.Values)
         {
-            Instantiate(Floor, new Vector3(values.x, FLOOR_SPAWN_HIGH, values.z), Quaternion.identity);
+            ObjectPool.Instance.Spawn(Floor, new Vector3(values.x, FLOOR_SPAWN_HIGH, values.z), Quaternion.identity, mLevelAreaObjectRoot.transform);
         }
 
         // Spawn Wall
@@ -40,16 +42,16 @@ public class LevelBuilder : Singleton<LevelBuilder>
         for(int i = 0; i < iLevelData.LevelLayout.x + 2 ; i++)
         {
             Vector3 spawnPosDown = new Vector3( (downLeft.x - MODULE_SIZE) + (i * MODULE_SIZE), WALL_SPAWN_HIGH, downLeft.z - MODULE_SIZE);
-            Instantiate(Wall, spawnPosDown, Quaternion.identity);
+            ObjectPool.Instance.Spawn(Wall, spawnPosDown, Quaternion.identity, mLevelAreaObjectRoot.transform);
             Vector3 spawnPosUp = new Vector3( (downLeft.x - MODULE_SIZE) + (i * MODULE_SIZE), WALL_SPAWN_HIGH, upRight.z + MODULE_SIZE);
-            Instantiate(Wall, spawnPosUp, Quaternion.identity);
+            ObjectPool.Instance.Spawn(Wall, spawnPosUp, Quaternion.identity, mLevelAreaObjectRoot.transform);
         }
         for(int i = 0; i < iLevelData.LevelLayout.y ; i++)
         {
             Vector3 spawnPosLeft = new Vector3( downLeft.x - MODULE_SIZE, WALL_SPAWN_HIGH, (downLeft.z + i * MODULE_SIZE));
-            Instantiate(Wall, spawnPosLeft, Quaternion.identity);
+            ObjectPool.Instance.Spawn(Wall, spawnPosLeft, Quaternion.identity, mLevelAreaObjectRoot.transform);
             Vector3 spawnPosRight = new Vector3( upRight.x + MODULE_SIZE, WALL_SPAWN_HIGH, (downLeft.z + i * MODULE_SIZE));
-            Instantiate(Wall, spawnPosRight, Quaternion.identity);
+            ObjectPool.Instance.Spawn(Wall, spawnPosRight, Quaternion.identity, mLevelAreaObjectRoot.transform);
         }
     }
 
@@ -58,12 +60,14 @@ public class LevelBuilder : Singleton<LevelBuilder>
     //-----------------------------------------------------------------------
     private GameObject Floor;
     private GameObject Wall;
+    private GameObject mLevelAreaObjectRoot;
 
     //-----------------------------------------------------------------------
     // Const
     //-----------------------------------------------------------------------
-    private const string FLOOR_OBJECT_PATH = "Prefabs/Floor";
-    private const string WALL_OBJECT_PATH  = "Prefabs/Wall";
+    private const string LEVEL_AREA_OBJECT_ROOT_NAME = "LevelAreaObjectRoot";
+    private const string FLOOR_OBJECT_PATH           = "Prefabs/Floor";
+    private const string WALL_OBJECT_PATH            = "Prefabs/Wall";
     private const float  MODULE_SIZE       = 1.0f;
     private const float  FLOOR_SPAWN_HIGH  = -0.5f;
     private const float  WALL_SPAWN_HIGH   = -1.0f;
