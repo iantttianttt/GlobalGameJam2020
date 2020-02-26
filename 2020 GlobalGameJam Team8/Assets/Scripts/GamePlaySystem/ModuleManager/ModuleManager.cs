@@ -423,6 +423,6 @@ public class ModuleManager : Singleton<ModuleManager>
     //-----------------------------------------------------------------------
     private const float  MODULE_SIZE = 1.0f;
     private const float  MODULE_HIGH = 0.0f;
-    private const string MODULE_REFERENCE_OBJECT_PATH = "GameSetting/ModuleReferenceData";
-    private const string HAMMER_BREAKABLE_LIST_PATH   = "GameSetting/HammerBreakableList";
+    private const string MODULE_REFERENCE_OBJECT_PATH = "GameSetting/Module Reference Data";
+    private const string HAMMER_BREAKABLE_LIST_PATH   = "GameSetting/Hammer Breakable List";
 }

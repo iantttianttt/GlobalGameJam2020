@@ -20,8 +20,6 @@ public class GameController : Singleton<GameController>
     //-----------------------------------------------------------------------
     //Public Parameter
     //-----------------------------------------------------------------------
-    public MainUI mainUI;
-    public PauseUI pauseUI;
     public GamePlayState GetGameState { get { return mGameState; } }
 
     //-----------------------------------------------------------------------
@@ -51,7 +49,6 @@ public class GameController : Singleton<GameController>
 
     public void UpdateController()
     {
-        //       mainUI.SetBar(pressure);
         switch (mGameState)
         {
             case GamePlayState.Preparing:
@@ -60,7 +57,8 @@ public class GameController : Singleton<GameController>
                 mStartCountDownTimer -= Time.deltaTime;
                 if (mStartCountDownTimer <= 0.0f)
                 {
-                    mGameState = GamePlayState.FirstSteamTime;
+                    mGameState     = GamePlayState.FirstSteamTime;
+                    mGameMainUI    = (UIPanel_GameplayMain)UIManager.Instance.ShowPanel(EUIPanelType.GAMEPLAY_MAIN);
                     mPressureTimer = 0.0f;
                 }
                 break;
@@ -69,7 +67,10 @@ public class GameController : Singleton<GameController>
                 ModuleManager.Instance.StartCheckLinkedCount();
                 ModuleManager.Instance.ModuleAutoUpdate();
                 mPressureTimer += Time.deltaTime;
-//                mainUI.SetBar(mPressureTimer, mSteamStartTimer);
+                if (mGameMainUI != null)
+                {
+                    mGameMainUI.SetBar(mPressureTimer, mSteamStartTimer); 
+                }
                 if (mPressureTimer > mSteamStartTimer)
                 {
                     GameOver();
@@ -197,6 +198,7 @@ public class GameController : Singleton<GameController>
     /// </summary>
     private void EveryFrameUpdate()
     {
+        /*
         if (XCI.GetButtonDown(XboxButton.Start, XboxController.First) ||
             XCI.GetButtonDown(XboxButton.Start, XboxController.Second) ||
             XCI.GetButtonDown(XboxButton.Start, XboxController.Fourth) ||
@@ -205,6 +207,7 @@ public class GameController : Singleton<GameController>
             pauseUI.gameObject.SetActive(true);
             Time.timeScale = 0;
         }
+        */
     }
 
     //-----------------------------------------------------------------------
@@ -215,9 +218,10 @@ public class GameController : Singleton<GameController>
     private float         mSteamBreakTimer;
     private float         mPressureTimer;
     private float         mStartCountDownTimer;
-    private List<Vector2> mPlayerSpawnPos = new List<Vector2>();
-    private Dictionary<string, LevelData> mLevelDatas = new Dictionary<string, LevelData>( );
 
+    private List<Vector2>                 mPlayerSpawnPos = new List<Vector2>();
+    private Dictionary<string, LevelData> mLevelDatas     = new Dictionary<string, LevelData>( );
+    private UIPanel_GameplayMain          mGameMainUI;
     //-----------------------------------------------------------------------
     // Const
     //-----------------------------------------------------------------------

@@ -18,21 +18,22 @@ public class State_PlayerSelect : IGameState
         {
             yield return null;
         }
-		mStatePrepared = true;
+        UIManager.Instance.InitUIManager();
+        mStatePrepared = true;
 	}
 
 	// 開始
 	public override void StateEnter()
 	{
-		SceneController.Instance.LoadScene(SceneController.SCENE_NAME_PLAYER_SELECT);
-		base.StateEnter();
+
+        mPlayerSelectUI = (UIPanel_PlayerSelect)UIManager.Instance.ShowPanel(EUIPanelType.PLAYER_SELECT_MENU);
 	}
 
 	// 結束
 	public override void StateExit()
 	{
-
-	}
+        UIManager.Instance.ClearAllPanel();
+    }
 			
 	// 更新
 	public override void StateUpdate()
@@ -85,11 +86,13 @@ public class State_PlayerSelect : IGameState
         if (inButton && PlayerManager.Instance.SearchPlayer(_controllerType) == null)
 		{
             PlayerManager.Instance.AddPlayer(_controllerType);
-		}
+            mPlayerSelectUI.SetImage();
+        }
 		else if (outButton && PlayerManager.Instance.SearchPlayer(_controllerType) != null)
         {
-		    PlayerManager.Instance.RemovePlayer(PlayerManager.Instance.SearchPlayer(_controllerType));     
-		}
+		    PlayerManager.Instance.RemovePlayer(PlayerManager.Instance.SearchPlayer(_controllerType));
+            mPlayerSelectUI.SetImage();
+        }
     }
 
     /// <summary>
@@ -107,5 +110,8 @@ public class State_PlayerSelect : IGameState
         }
     }
 
-
+    //-----------------------------------------------------------------------
+    // Private Parameter
+    //-----------------------------------------------------------------------
+    private UIPanel_PlayerSelect mPlayerSelectUI;
 }

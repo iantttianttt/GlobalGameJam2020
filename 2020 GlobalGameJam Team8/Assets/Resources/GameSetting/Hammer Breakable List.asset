@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cc7e4454b4916a43aac89cc808095c7, type: 3}
-  m_Name: HammerBreakableList
+  m_Name: Hammer Breakable List
   m_EditorClassIdentifier: 
   BreakableList: 0a0000000b0000000c0000000d000000

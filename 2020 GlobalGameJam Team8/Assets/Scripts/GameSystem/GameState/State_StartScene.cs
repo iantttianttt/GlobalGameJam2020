@@ -10,18 +10,30 @@ public class State_StartScene : IGameState
 		this.StateName = "StartScene";
 	}
 
+	// 準備(讀取場景等)
+	public override IEnumerator StatePrepare()
+	{
+		AsyncOperation asyncLoad = SceneController.Instance.LoadScene(SceneController.SCENE_NAME_START_MENU);
+		while (!asyncLoad.isDone)
+		{
+			yield return null;
+		}
+		UIManager.Instance.InitUIManager();
+		mStatePrepared = true;
+	}
+
 	// 開始
 	public override void StateEnter()
 	{
-
+		UIManager.Instance.ShowPanel(EUIPanelType.START_MENU);
 	}
 
 	// 結束
 	public override void StateExit()
 	{
-
+		UIManager.Instance.ClearAllPanel();
 	}
-			
+
 	// 更新
 	public override void StateUpdate()
 	{	

@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/NewSystem/LoadingScene.unity
     guid: 7a9123721ec6c874580321b8128b4d3c
   - enabled: 1
+    path: Assets/Scenes/NewSystem/StartMenu.unity
+    guid: f9bd49516a13499409e23ce596cb9e7e
+  - enabled: 1
     path: Assets/Scenes/NewSystem/PlayerSelect.unity
     guid: be15b392a55db1a4fa71a7c284585da5
   - enabled: 1

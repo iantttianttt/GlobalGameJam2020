@@ -18,7 +18,7 @@ public class IGameState
 	// 建構者
 	public IGameState(GameManager _GameManager)
 	{ 
-		mGameNanager = _GameManager; 
+		mGameManager = _GameManager; 
 	}
 
 	// 準備(讀取場景等)
@@ -49,7 +49,7 @@ public class IGameState
     // Private Parameter
     //-----------------------------------------------------------------------
 	private string        mStateName     = "IGameState";
-	protected GameManager mGameNanager   = null;
+	protected GameManager mGameManager   = null;
 	protected bool        mStatePrepared = false;
 
 

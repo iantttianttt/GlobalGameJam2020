@@ -16,8 +16,10 @@ public class State_GamePlay : IGameState
         {
             yield return null;
         }
+		UIManager.Instance.InitUIManager();
 		GameController.Instance.InitNewGame("001");
         yield return new WaitForSeconds(LEVEL_BUILD_TIME);
+
 		mStatePrepared = true;
 	}
 
@@ -31,7 +33,7 @@ public class State_GamePlay : IGameState
 	public override void StateExit()
 	{
 		GameController.Instance.ClearGamePlayLevel();
-
+		UIManager.Instance.ClearAllPanel();
 	}
 			
 	// 更新

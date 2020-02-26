@@ -57,6 +57,7 @@ public class SceneController : Singleton<SceneController>
     // Const
     //-----------------------------------------------------------------------
     public const string SCENE_NAME_LOAD_SCENE    = "LoadingScene";
+    public const string SCENE_NAME_START_MENU    = "StartMenu";
     public const string SCENE_NAME_PLAYER_SELECT = "PlayerSelect";
     public const string SCENE_NAME_LEVEL_SELECT  = "LevelSelect";
     public const string SCENE_NAME_GAME_SCENE    = "GameScene";
