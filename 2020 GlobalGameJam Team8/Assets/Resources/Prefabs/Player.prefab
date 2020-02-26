@@ -6411,8 +6411,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62ef6596aa7e234db9d004c64fe5cdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  holdModule: {fileID: 0}
+  addSpeed: 3000
+  speed: 3
   throwPower: 800
+  handLength: 0.8
   holdPoint: {fileID: 6289699933557049919}
   putDisplay: {fileID: 5696177538249173506}
   RedBody: {fileID: 2680129481007258548}
