@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "GlobalGameJam2020/Create ModuleReferenceData")]
+[CreateAssetMenu(menuName = "REPIPE/Create ModuleReferenceData")]
 
 public class ModuleReferenceObject : ScriptableObject
 {

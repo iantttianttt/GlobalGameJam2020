@@ -146,10 +146,20 @@ public class UIManager : Singleton<UIManager>
     private void SetPanelDataList()
     {
         mPanelDataList.Clear();
-        List<UIPanelReference> UIPanelReferenceData = Utility.AssetRelate.ResourcesLoadCheckNull<UIPanelReferenceObject>(UI_PANEL_REFERENCE_OBJECT_PATH).UIPanelReferenceData;
-        foreach (UIPanelReference reference in UIPanelReferenceData)
+        GameObject[] UIPanelPrefabs = Utility.AssetRelate.ResourcesLoadAllCheckNull<GameObject>(UI_PANEL_PREFAB_FOLDER_PATH);
+        foreach (GameObject item in UIPanelPrefabs)
         {
-            mPanelDataList.Add(reference.UIPanelType, reference.ObjectReference);
+            if (item.GetComponent<IUIPanel>() == null)
+            {
+                Debug.LogErrorFormat("This [{0}] has no IUIPanel.cs on Prefab!", item.name);
+                return;
+            }
+            if (mPanelDataList.ContainsKey(item.GetComponent<IUIPanel>().PanelType))
+            {
+                Debug.LogErrorFormat("You have same PanelType in the UIPanel folder! Type : [{0}]", item.GetComponent<IUIPanel>().PanelType);
+                return;
+            }
+            mPanelDataList.Add(item.GetComponent<IUIPanel>().PanelType, item);
         }
     }
     private GameObject GetCanvasRoot()
@@ -189,4 +199,5 @@ public class UIManager : Singleton<UIManager>
     //-----------------------------------------------------------------------
     private const string UI_PANEL_REFERENCE_OBJECT_PATH = "GameSetting/UI Panel Reference Object";
     private const string UI_CANVAS_ROOT_OBJECT_PATH     = "UI/CanvasRoot";
+    private const string UI_PANEL_PREFAB_FOLDER_PATH    = "UI/UIPanel/";
 }

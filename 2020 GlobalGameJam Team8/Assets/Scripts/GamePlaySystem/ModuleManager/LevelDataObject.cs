@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName="GlobalGameJam2020/Create LevelDataObject")]
+[CreateAssetMenu(menuName="REPIPE/Create LevelDataObject")]
 public class LevelDataObject : ScriptableObject
 {
     public LevelData LevelData;

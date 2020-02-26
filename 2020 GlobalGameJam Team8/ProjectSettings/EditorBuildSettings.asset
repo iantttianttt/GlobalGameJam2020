@@ -21,21 +21,21 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/NewSystem/Start.unity
+    path: Assets/Scenes/Start.unity
     guid: 4a71c4f7da950eb45b2d98a3f2e3a4ae
   - enabled: 1
-    path: Assets/Scenes/NewSystem/LoadingScene.unity
+    path: Assets/Scenes/GameScene/LoadingScene.unity
     guid: 7a9123721ec6c874580321b8128b4d3c
   - enabled: 1
-    path: Assets/Scenes/NewSystem/StartMenu.unity
+    path: Assets/Scenes/GameScene/StartMenu.unity
     guid: f9bd49516a13499409e23ce596cb9e7e
   - enabled: 1
-    path: Assets/Scenes/NewSystem/PlayerSelect.unity
+    path: Assets/Scenes/GameScene/PlayerSelect.unity
     guid: be15b392a55db1a4fa71a7c284585da5
   - enabled: 1
-    path: Assets/Scenes/NewSystem/LevelSelect.unity
+    path: Assets/Scenes/GameScene/LevelSelect.unity
     guid: bcadb4a325d3a0e47932e78edfe9c630
   - enabled: 1
-    path: Assets/Scenes/NewSystem/GameScene.unity
+    path: Assets/Scenes/GameScene/GameScene.unity
     guid: 424028022e00f3f4798cb8372987f2c3
   m_configObjects: {}
