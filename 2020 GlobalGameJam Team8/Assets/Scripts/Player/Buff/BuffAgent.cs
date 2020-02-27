@@ -20,6 +20,7 @@ public class BuffAgent
 
     public void BuffUpdate()
     {
+        PlayerDetail BuffsDetail = new PlayerDetail();
         for (int i = 0; i < Buffs.Count; i++)
         {
             if (!Buffs[i].isStart) Buffs[i].Enter();
@@ -33,12 +34,16 @@ public class BuffAgent
                 Buffs[i].lifeTime -= Time.deltaTime;
                 Buffs[i].Update();
             }
+
+            BuffsDetail += Buffs[i].buffDetail;
         }
+
+        player.Detail = player.DefaultDetail + BuffsDetail;
+        player.Detail.Clamp(0, Mathf.Infinity);
     }
 
     public void AddBuff(IBuff addBuff)
     {
-        addBuff.player = player;
         Buffs.Add(addBuff);
     } 
     

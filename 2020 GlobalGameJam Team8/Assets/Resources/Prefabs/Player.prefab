@@ -6412,16 +6412,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   holdModule: {fileID: 0}
-  addSpeed: 3000
-  speed: 3
-  throwPower: 800
-  handLength: 0.8
   holdPoint: {fileID: 6289699933557049919}
   putDisplay: {fileID: 5696177538249173506}
   RedBody: {fileID: 2680129481007258548}
   YellowBody: {fileID: 597985773758073454}
   GreenBody: {fileID: 7074241374604864582}
   BlueBody: {fileID: 5908724666555657832}
+  Detail:
+    addSpeed: 0
+    speed: 0
+    throwPower: 0
+    handLength: 0
+  DefaultDetail:
+    addSpeed: 3000
+    speed: 3
+    throwPower: 800
+    handLength: 0.8
 --- !u!1 &6289699933557049919
 GameObject:
   m_ObjectHideFlags: 0

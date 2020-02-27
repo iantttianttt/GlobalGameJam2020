@@ -5,10 +5,14 @@ using UnityEngine;
 public abstract class IBuff
 {
     public float lifeTime = 1f;
-    public Player player;
+    public PlayerDetail buffDetail;
     public bool isStart=false;
 
-    protected IBuff(float _lifeTime) { lifeTime = _lifeTime; }
+    protected IBuff(float _lifeTime) 
+    {
+        buffDetail = new PlayerDetail();
+        lifeTime = _lifeTime; 
+    }
     public virtual void Enter(){ isStart = true; }
     public virtual void Update(){}
     public virtual void Exit(){}
@@ -18,16 +22,16 @@ public abstract class IBuff
 public class Dizziness : IBuff
 {
     public Dizziness(float _lifeTime) : base(_lifeTime) { }
-    float deSpeed;
+
     public override void Enter()
     {
-        deSpeed = player.speed;
-        player.speed -= deSpeed;
+        buffDetail.speed = -Mathf.Infinity;
+        buffDetail.addSpeed = -Mathf.Infinity;
         base.Enter();
     }
     public override void Exit()
     {
-        player.speed += deSpeed;
+        Debug.Log("DizzinessDone");
     }
 }
 
@@ -35,20 +39,9 @@ public class Dizziness : IBuff
 public class DeSpeed : IBuff
 {
     public DeSpeed(float _lifeTime) : base(_lifeTime) { }
-    private float deSpeed=3;
-    private float lastSpeed;
     public override void Enter()
     {
-        if (player.speed<= deSpeed)
-        {
-            deSpeed = player.speed;
-            player.speed = 0;
-        }
-        else
-        {            
-            player.speed -= deSpeed;
-        }
-        lastSpeed = player.speed;
+        buffDetail.speed = -2;
         base.Enter();
     }
     public override void Update()
@@ -56,7 +49,6 @@ public class DeSpeed : IBuff
     }
     public override void Exit()
     {
-       player.speed += deSpeed;
-       
+        Debug.Log("DeSpeedDone");
     }
 }

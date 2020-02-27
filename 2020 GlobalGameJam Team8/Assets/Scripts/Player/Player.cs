@@ -23,14 +23,6 @@ public class Player : MonoBehaviour
     /// 被抓住的物件
     [HideInInspector] public GameObject holdModule;
 
-    /// 加速度
-    [HideInInspector] public float addSpeed = 3000;
-    /// 當前最大速度
-    [HideInInspector] public float speed = 3;
-    /// 拋物件時的力道
-    [HideInInspector] public float throwPower = 800;
-    /// 手長度(可取得物件以及放置物件的距離)
-    [HideInInspector] public float handLength = 0.8f;
 
     /// <summary>
     /// 控制器
@@ -55,6 +47,16 @@ public class Player : MonoBehaviour
     /// Buff狀態代理
     /// </summary>
     [HideInInspector] public BuffAgent buffAgent;
+
+    /// <summary>
+    /// 玩家當前能力值
+    /// </summary>
+    [HideInInspector] public PlayerDetail Detail;
+
+    /// <summary>
+    /// 玩家預設能力值
+    /// </summary>
+    public PlayerDetail DefaultDetail;
 
     //-----------------------------------------------------------------------
     // Private Function
@@ -104,6 +106,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         Init();
+        Detail = DefaultDetail;
     }
     
     private void Update()
@@ -127,13 +130,13 @@ public class Player : MonoBehaviour
         float horizontal = controller.Horizontal();
         float vertical = controller.Vertical();
 
-        if(Mathf.Abs(rb.velocity.x) < speed && Mathf.Abs(rb.velocity.y) < speed)
+        if(Mathf.Abs(rb.velocity.x) < Detail.speed && Mathf.Abs(rb.velocity.y) < Detail.speed)
         {
-            rb.AddForce(new Vector3(horizontal, 0, vertical) * addSpeed * Time.deltaTime, ForceMode.Acceleration);
+            rb.AddForce(new Vector3(horizontal, 0, vertical) * Detail.addSpeed * Time.deltaTime, ForceMode.Acceleration);
         }
-        rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -speed, speed), 0, Mathf.Clamp(rb.velocity.z, -speed, speed));
+        rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -Detail.speed, Detail.speed), 0, Mathf.Clamp(rb.velocity.z, -Detail.speed, Detail.speed));
 
-        if (Mathf.Abs(horizontal) + Mathf.Abs(vertical) > LEAST_MOVEMENT_VALUE_TO_ROTATE && speed > 0)
+        if (Mathf.Abs(horizontal) + Mathf.Abs(vertical) > LEAST_MOVEMENT_VALUE_TO_ROTATE && Detail.speed > 0)
         {           
             transform.eulerAngles = new Vector3(0, Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg, 0);
         }
@@ -150,7 +153,6 @@ public class Player : MonoBehaviour
         StateHandle = nextState;
         StateHandle.Enter();
     }
-
  
     /// <summary>
     /// 設置玩家暈眩
@@ -161,11 +163,49 @@ public class Player : MonoBehaviour
         buffAgent.AddBuff(new Dizziness(_lifeTime));
     }
 
+
     private const float LEAST_MOVEMENT_VALUE_TO_ROTATE = 0.3f;
     public const float MAX_SPEED = 6f;
 
 }
 
+[System.Serializable]
+public class PlayerDetail 
+{
+    /// 加速度
+    public float addSpeed;
+    /// 當前最大速度
+    public float speed;
+    /// 拋物件時的力道
+    public float throwPower;
+    /// 手長度(可取得物件以及放置物件的距離)
+    public float handLength;
+
+    public void Clear()
+    {
+        addSpeed = 0;
+        speed = 0;
+        throwPower = 0;
+        handLength = 0;
+    }
+    public static PlayerDetail operator +(PlayerDetail a, PlayerDetail b)
+    {
+        PlayerDetail result=new PlayerDetail();
+        result.addSpeed = a.addSpeed + b.addSpeed;
+        result.speed = a.speed + b.speed;
+        result.throwPower = a.throwPower + b.throwPower;
+        result.handLength = a.handLength + b.handLength;
+        return result;
+    }
+
+    public void Clamp(float min, float max)
+    {
+        addSpeed = Mathf.Clamp(addSpeed, min, max);
+        speed = Mathf.Clamp(speed, min, max);
+        throwPower = Mathf.Clamp(throwPower, min, max);
+        handLength = Mathf.Clamp(handLength, min, max);
+    }
+}
 
 
 

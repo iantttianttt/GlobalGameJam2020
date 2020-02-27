@@ -26,7 +26,7 @@ public class IdleState : IPlayerState
         ray.origin = new Vector3(player.transform.position.x, player.transform.position.y + 0.7f, player.transform.position.z);
         ray.direction = player.transform.forward;
         RaycastHit raycastHit;
-        if (Physics.Raycast(ray, out raycastHit, player.handLength, 1 << 8))
+        if (Physics.Raycast(ray, out raycastHit, player.Detail.handLength, 1 << 8))
         {
             if (player.controller.PressButtonA())
             {
@@ -51,7 +51,7 @@ public class HoldingModule : IPlayerState
     {
         player.holdModule.gameObject.transform.position = player.holdPoint.transform.position;
 
-        Vector3 putDownPos = player.transform.position + player.transform.forward * player.handLength;
+        Vector3 putDownPos = player.transform.position + player.transform.forward * player.Detail.handLength;
         Vector2 targetIndex = ModuleManager.Instance.GetClosestIndexDictionary(putDownPos);
         Vector3 newPutDownPos;
         ModuleManager.Instance.ModulePositionData.TryGetValue(targetIndex, out newPutDownPos);
@@ -90,7 +90,7 @@ public class HoldingModule : IPlayerState
     /// 放下物件
     private bool PutDownModule()
     {
-        Vector3 putDownPos = player.transform.position + player.transform.forward * player.handLength;
+        Vector3 putDownPos = player.transform.position + player.transform.forward * player.Detail.handLength;
         Vector2 targetIndex = ModuleManager.Instance.GetClosestIndexDictionary(putDownPos);
         ModuleBase moduleBase = null;
         ModuleManager.Instance.SetUpModuleList.TryGetValue(targetIndex, out moduleBase);
@@ -127,7 +127,7 @@ public class HoldingModule : IPlayerState
             player.holdModule.gameObject.GetComponent<Collider>().isTrigger = false;
             player.holdModule.gameObject.GetComponent<Rigidbody>().useGravity = true;
             player.holdModule.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            player.holdModule.gameObject.GetComponent<Rigidbody>().AddForce(((player.transform.forward + new Vector3(0, 0.7f, 0))) * player.throwPower);
+            player.holdModule.gameObject.GetComponent<Rigidbody>().AddForce(((player.transform.forward + new Vector3(0, 0.7f, 0))) * player.Detail.throwPower);
         }
     }
 }
